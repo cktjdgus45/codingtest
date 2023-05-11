@@ -1,23 +1,28 @@
 #include <bits/stdc++.h>
 using namespace std;
-vector<string> split(string input, string delimiter)
-{
-    vector<string> ret;
-    long long pos = 0;
-    string token = "";
-    while ((pos = input.find(delimiter)) != string::npos)
-    {
-        token = input.substr(0, pos);
-        ret.push_back(token);
-        input.erase(0, pos + delimiter.length());
-    }
-    ret.push_back(input);
-    return ret;
-}
+
+map<int, int> mp;
+
 int main()
 {
-    string s = "사무엘 에토 만세", d = " ";
-    vector<string> a = split(s, d);
-    for (string b : a)
-        cout << b << "\n";
+    vector<int> v{1, 1, 2, 2, 3, 3};
+    for (int i : v)
+    {
+        if (mp[i])
+        {
+            continue;
+        }
+        else
+        {
+            mp[i] = 1;
+        }
+    }
+    vector<int> ret;
+    for (auto it : mp)
+    {
+        ret.push_back(it.first);
+    }
+    for (int i : ret)
+        cout
+            << i << "\n";
 }
