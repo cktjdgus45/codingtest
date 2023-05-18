@@ -1,21 +1,27 @@
 #include <bits/stdc++.h>
 using namespace std;
-int n, cnt[26];
-string s, ret;
+string s;
 int main()
 {
-    cin >> n;
-    for (int i = 0; i < n; i++)
+    getline(cin, s);
+    for (int i = 0; i < s.size(); i++)
     {
-        cin >> s;
-        cnt[s[0] - 'a']++;
+        // 대문자인경우
+        if (s[i] >= 65 && s[i] < 97)
+        {
+            if (s[i] + 13 > 90)
+                s[i] = s[i] + 13 - 26;
+            else
+                s[i] = s[i] + 13;
+        }
+        else if (s[i] >= 97 && s[i] <= 122)
+        {
+            if (s[i] + 13 > 122)
+                s[i] = s[i] + 13 - 26;
+            else
+                s[i] = s[i] + 13;
+        }
+        cout << s[i];
     }
-    for (int i = 0; i < 26; i++)
-        if (cnt[i] >= 5)
-            ret += i + 'a';
-    if (ret.size())
-        cout << ret << "\n";
-    else
-        cout << "PREDAJA"
-             << "\n";
+    return 0;
 }
