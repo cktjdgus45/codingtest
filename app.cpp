@@ -1,27 +1,27 @@
 #include <bits/stdc++.h>
 using namespace std;
-
-typedef long long ll;
-string str;
-int cnt[26];
-
+int A, B, C, a, b, cnt[104], ret;
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-
-    cin >> str;
-
-    for (char a : str)
+    cin >> A >> B >> C;
+    for (int i = 0; i < 3; i++)
     {
-        cnt[a - 'a']++;
+        cin >> a >> b;
+        for (int j = a; j < b; j++)
+            cnt[j]++;
     }
-
-    for (int i = 0; i < 26; i++)
+    for (int j = 1; j < 100; j++)
     {
-        cout << cnt[i] << " ";
+        if (cnt[j])
+        {
+            if (cnt[j] == 1)
+                ret += A;
+            else if (cnt[j] == 2)
+                ret += B * 2;
+            else if (cnt[j] == 3)
+                ret += C * 3;
+        }
     }
-
+    cout << ret << "\n";
     return 0;
 }
