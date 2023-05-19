@@ -1,27 +1,28 @@
 #include <bits/stdc++.h>
 using namespace std;
-string s;
+int n;
+string s, ori_s, pre, suf;
 int main()
 {
-    getline(cin, s);
-    for (int i = 0; i < s.size(); i++)
+    cin >> n;
+    cin >> ori_s;
+    int pos = ori_s.find('*');
+    pre = ori_s.substr(0, pos);
+    suf = ori_s.substr(pos + 1);
+    for (int i = 0; i < n; i++)
     {
-        // 대문자인경우
-        if (s[i] >= 65 && s[i] < 97)
+        cin >> s;
+        if (pre.size() + suf.size() > s.size())
         {
-            if (s[i] + 13 > 90)
-                s[i] = s[i] + 13 - 26;
-            else
-                s[i] = s[i] + 13;
+            cout << "NE\n";
         }
-        else if (s[i] >= 97 && s[i] <= 122)
+        else
         {
-            if (s[i] + 13 > 122)
-                s[i] = s[i] + 13 - 26;
+            if (pre == s.substr(0, pre.size()) && suf == s.substr(s.size() - suf.size()))
+                cout << "DA\n";
             else
-                s[i] = s[i] + 13;
+                cout << "NE\n";
         }
-        cout << s[i];
     }
     return 0;
 }
