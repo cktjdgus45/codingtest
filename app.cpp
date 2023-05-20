@@ -1,38 +1,26 @@
 #include <bits/stdc++.h>
 using namespace std;
-string s, ret;
-int cnt[200], flag;
-char mid;
+int n, m, a[15001], cnt;
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
-    cin >> s;
-    for (char a : s)
-        cnt[a]++;
-    for (int i = 'Z'; i >= 'A'; i--)
+    cin >> n >> m;
+    for (int i = 0; i < n; i++)
+        cin >> a[i];
+    // 이 if문은 없어도됨. but, 설명을 위해.
+    if (m > 200000)
+        cout << 0 << " ";
+    else
     {
-        if (cnt[i])
+        for (int i = 0; i < n; i++)
         {
-            if (cnt[i] & 1)
+            for (int j = i + 1; j < n; j++)
             {
-                mid = char(i);
-                flag++;
-                cnt[i]--;
-            }
-            if (flag == 2)
-                break;
-            for (int j = 0; j < cnt[i]; j += 2)
-            {
-                ret = char(i) + ret;
-                ret += char(i);
+                if (a[i] + a[j] == m)
+                    cnt++;
             }
         }
+        cout << cnt << "\n";
     }
-    if (mid)
-        ret.insert(ret.begin() + ret.size() / 2, mid);
-    if (flag == 2)
-        cout << "I'm Sorry Hansoo\n";
-    else
-        cout << ret << "\n";
 }
