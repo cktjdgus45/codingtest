@@ -1,26 +1,25 @@
 #include <bits/stdc++.h>
 using namespace std;
-int n, m, a[15001], cnt;
+int n, ret;
+string s;
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cin >> n >> m;
-    for (int i = 0; i < n; i++)
-        cin >> a[i];
-    // 이 if문은 없어도됨. but, 설명을 위해.
-    if (m > 200000)
-        cout << 0 << " ";
-    else
-    {
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = i + 1; j < n; j++)
-            {
-                if (a[i] + a[j] == m)
-                    cnt++;
-            }
-        }
-        cout << cnt << "\n";
-    }
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin >> n;
+	for (int i = 0; i < n; i++)
+	{
+		cin >> s;
+		stack<char> stk;
+		for (char a : s)
+		{
+			if (stk.size() && stk.top() == a)
+				stk.pop();
+			else
+				stk.push(a);
+		}
+		if (stk.size() == 0)
+			ret++;
+	}
+	cout << ret << "\n";
 }
