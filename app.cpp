@@ -1,37 +1,38 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
-const int n = 6; 
-vector<int> adj[n];
-int visited[n];
-void dfs(int u){
-    visited[u] = 1;
-    cout << u << "\n";
-    for(int v : adj[u]){
-        if(visited[v] == 0){
-            dfs(v);
-        }
-    }   
-    cout << u << "로부터 시작된 함수가 종료되었습니다.\n";
-    return; 
+const int max_n = 104;
+int dy[4] = {-1, 0, 1, 0};
+int dx[4] = {0, 1, 0, -1};
+int n, m, a[max_n][max_n], visited[max_n][max_n], y, x;
+int main()
+{
+	scanf("%d %d", &n, &m);
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			scanf("%1d", &a[i][j]);
+		}
+	}
+	queue<pair<int, int>> q;
+	visited[0][0] = 1;
+	q.push({0, 0});
+	while (q.size())
+	{
+		tie(y, x) = q.front();
+		q.pop();
+		for (int i = 0; i < 4; i++)
+		{
+			int ny = y + dy[i];
+			int nx = x + dx[i];
+			if (ny < 0 || ny >= n || nx < 0 || nx >= m || a[ny][nx] == 0)
+				continue;
+			if (visited[ny][nx])
+				continue;
+			visited[ny][nx] = visited[y][x] + 1;
+			q.push({ny, nx});
+		}
+	}
+	printf("%d", visited[n - 1][m - 1]);
+	return 0;
 }
-int main(){
-    adj[1].push_back(2);
-    adj[1].push_back(3); 
-    adj[2].push_back(4);  
-    adj[4].push_back(2);  
-    adj[2].push_back(5);   
-    dfs(1); 
-} 
-/*
-1
-2
-4
-4로부터 시작된 함수가 종료되었습니다.
-5
-5로부터 시작된 함수가 종료되었습니다.
-2로부터 시작된 함수가 종료되었습니다.
-3
-3로부터 시작된 함수가 종료되었습니다.
-1로부터 시작된 함수가 종료되었습니다.
-*/
-
