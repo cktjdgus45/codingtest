@@ -1,30 +1,41 @@
 #include <bits/stdc++.h>
 using namespace std;
-int n, m, j, l, r, temp, ret;
+int n, m, a[104][104];
+string s;
 int main()
 {
-    cin >> n >> m >> j;
-    l = 1;
-    for (int i = 0; i < j; i++)
-    {
-        r = l + m - 1;
-        cin >> temp;
-        if (temp >= l && temp <= r)
-            continue;
-        else
-        {
-            if (temp < l)
-            {
-                ret += (l - temp);
-                l = temp;
-            }
-            else
-            {
-                l += (temp - r);
-                ret += (temp - r);
-            }
-        }
-    }
-    cout << ret << "\n";
-    return 0;
+	cin >> n >> m;
+	for (int i = 0; i < n; i++)
+	{
+		cin >> s;
+		for (int j = 0; j < m; j++)
+		{
+			if (s[j] == '.')
+				a[i][j] = -1;
+			else
+				a[i][j] = 0;
+		}
+	}
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			if (a[i][j] == 0)
+			{
+				int cnt = 1;
+				while (a[i][j + 1] == -1)
+				{
+					a[i][j + 1] = cnt++;
+					j++;
+				}
+			}
+		}
+	}
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+			cout << a[i][j] << " ";
+		cout << "\n";
+	}
+	return 0;
 }
