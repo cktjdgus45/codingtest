@@ -1,66 +1,69 @@
-#include <bits/stdc++.h>
+#include <bits/stdc++.h> 
 using namespace std;
-int visited[54][54], a[54][54], n, l, r, sum, cnt;
-const int dy[] = {-1, 0, 1, 0};
-const int dx[] = {0, 1, 0, -1};
-vector<pair<int, int>> v;
-void dfs(int y, int x, vector<pair<int, int>> &v)
-{
-    for (int i = 0; i < 4; i++)
-    {
-        int ny = y + dy[i];
-        int nx = x + dx[i];
-        if (nx < 0 || nx >= n || ny < 0 || ny >= n || visited[ny][nx])
-            continue;
-        if (abs(a[ny][nx] - a[y][x]) >= l && abs(a[ny][nx] - a[y][x]) <= r)
-        {
-            visited[ny][nx] = 1;
-            v.push_back({ny, nx});
-            sum += a[ny][nx];
-            dfs(ny, nx, v);
-        }
-    }
+const int INF = 987654321;
+char a[1004][1004];
+int n,m,sx,sy,dx[4]={-1,0,1,0},dy[4]={0,-1,0,1}, ret, y, x;
+int fire_check[1004][1004], person_check[1004][1004];
+bool in(int a,int b){
+	return 0 <= a && a < n && 0 <= b && b < m;
 }
-
-int main()
-{
-    cin >> n >> l >> r;
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
+int main(){
+    ios_base::sync_with_stdio(false);
+	cin.tie(0); cout.tie(0); 
+	queue<pair<int, int>> q;
+    cin >> n >> m;  
+	fill(&fire_check[0][0], &fire_check[0][0] + 1004 * 1004, INF);
+    for(int i = 0; i < n; i++){ 
+        for(int j = 0; j < m; j++){
             cin >> a[i][j];
-        }
-    }
-    while (true)
-    {
-        bool flag = 0;
-        fill(&visited[0][0], &visited[0][0] + 54 * 54, 0);
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = 0; j < n; j++)
-            {
-                if (!visited[i][j])
-                {
-                    v.clear();
-                    visited[i][j] = 1;
-                    v.push_back({i, j});
-                    sum = a[i][j];
-                    dfs(i, j, v);
-                    if (v.size() == 1)
-                        continue;
-                    for (pair<int, int> b : v)
-                    {
-                        a[b.first][b.second] = sum / v.size();
-                        flag = 1;
-                    }
-                }
+            if(a[i][j] == 'F'){
+                fire_check[i][j] = 1; q.push({i, j});
+            }else if(a[i][j] == 'J'){
+                sy = i; sx = j;
             }
         }
-        if (!flag)
+    } 
+
+	while(q.size()){
+        tie(y, x) = q.front(); 
+		q.pop();
+		for(int i = 0; i < 4; i++){
+			int ny = y + dy[i];
+			int nx = x + dx[i];
+			if(!in(ny,nx)) continue;
+			if(fire_check[ny][nx] != INF || a[ny][nx]=='#') continue;
+			fire_check[ny][nx] = fire_check[y][x] + 1;
+			q.push({ny, nx});
+		}
+	}
+
+	person_check[sy][sx]=1;
+	q.push({sy,sx});
+	while(q.size()){
+		int y = q.front().first;
+		int x = q.front().second;
+		q.pop(); 
+		if(x == m - 1 || y == n - 1 || x == 0 || y == 0){
+            ret = person_check[y][x];
             break;
-        cnt++;
-    }
-    cout << cnt << "\n";
-    return 0;
+		}
+		for(int i = 0; i < 4; i++){
+			int ny = y + dy[i];
+			int nx = x + dx[i];
+			if(!in(ny,nx)) continue;
+			if(person_check[ny][nx] || a[ny][nx]=='#') continue; 
+			if(fire_check[ny][nx] <= person_check[y][x] + 1) continue;
+            person_check[ny][nx] = person_check[y][x] + 1;
+            q.push({ny, nx});
+		}
+	} 
+    if(ret != 0) cout << ret << "\n";
+	else cout << "IMPOSSIBLE \n";
+	return 0;
 }
+/*
+3 3
+...
+.J.
+... 
+*/
