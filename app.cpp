@@ -1,69 +1,43 @@
-#include <bits/stdc++.h> 
-using namespace std;
-const int INF = 987654321;
-char a[1004][1004];
-int n,m,sx,sy,dx[4]={-1,0,1,0},dy[4]={0,-1,0,1}, ret, y, x;
-int fire_check[1004][1004], person_check[1004][1004];
-bool in(int a,int b){
-	return 0 <= a && a < n && 0 <= b && b < m;
-}
-int main(){
+#include <bits/stdc++.h>
+using namespace std;  
+
+vector<int> num; 
+vector<char> oper_str; 
+int n, ret = -987654321;
+string s; 
+void fastIO(){
     ios_base::sync_with_stdio(false);
-	cin.tie(0); cout.tie(0); 
-	queue<pair<int, int>> q;
-    cin >> n >> m;  
-	fill(&fire_check[0][0], &fire_check[0][0] + 1004 * 1004, INF);
-    for(int i = 0; i < n; i++){ 
-        for(int j = 0; j < m; j++){
-            cin >> a[i][j];
-            if(a[i][j] == 'F'){
-                fire_check[i][j] = 1; q.push({i, j});
-            }else if(a[i][j] == 'J'){
-                sy = i; sx = j;
-            }
-        }
+    cin.tie(NULL); 
+    cout.tie(NULL);   
+} 
+int oper(char a, int b, int c){
+    if(a == '+') return b + c; 
+    if(a == '-') return b - c; 
+    if(a == '*') return b * c;  
+} 
+
+void go(int here, int _num){
+    if(here == num.size() - 1){ 
+        ret = max(ret, _num); 
+        return;
+    }  
+    go(here + 1, oper(oper_str[here], _num, num[here + 1]));
+
+    if(here + 2 <= num.size() - 1){
+        int temp = oper(oper_str[here + 1], num[here + 1], num[here + 2]); 
+        go(here + 2, oper(oper_str[here], _num, temp));  
     } 
-
-	while(q.size()){
-        tie(y, x) = q.front(); 
-		q.pop();
-		for(int i = 0; i < 4; i++){
-			int ny = y + dy[i];
-			int nx = x + dx[i];
-			if(!in(ny,nx)) continue;
-			if(fire_check[ny][nx] != INF || a[ny][nx]=='#') continue;
-			fire_check[ny][nx] = fire_check[y][x] + 1;
-			q.push({ny, nx});
-		}
-	}
-
-	person_check[sy][sx]=1;
-	q.push({sy,sx});
-	while(q.size()){
-		int y = q.front().first;
-		int x = q.front().second;
-		q.pop(); 
-		if(x == m - 1 || y == n - 1 || x == 0 || y == 0){
-            ret = person_check[y][x];
-            break;
-		}
-		for(int i = 0; i < 4; i++){
-			int ny = y + dy[i];
-			int nx = x + dx[i];
-			if(!in(ny,nx)) continue;
-			if(person_check[ny][nx] || a[ny][nx]=='#') continue; 
-			if(fire_check[ny][nx] <= person_check[y][x] + 1) continue;
-            person_check[ny][nx] = person_check[y][x] + 1;
-            q.push({ny, nx});
-		}
-	} 
-    if(ret != 0) cout << ret << "\n";
-	else cout << "IMPOSSIBLE \n";
-	return 0;
-}
-/*
-3 3
-...
-.J.
-... 
-*/
+    return;
+} 
+int main(){
+    fastIO();
+    cin >> n;  
+    cin >> s; 
+    for(int i = 0; i < n; i++){
+        if(i % 2 == 0)num.push_back(s[i] - '0');
+        else oper_str.push_back(s[i]);
+    } 
+    go(0, num[0]);  
+    cout << ret << "\n";
+    return 0;
+} 
