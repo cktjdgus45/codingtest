@@ -1,28 +1,35 @@
 #include <bits/stdc++.h>
 using namespace std;
-int from, to, n, idx = 0, ret = 1;
+bool che[4000001];
+int n, a[2000001], p, lo, hi, ret, sum;
+
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cin >> n;
-    vector<pair<int, int>> v;
-    for (int i = 0; i < n; i++)
-    {
-        cin >> from >> to;
-        v.push_back({to, from});
-    }
-    sort(v.begin(), v.end());
-    from = v[0].second;
-    to = v[0].first;
-    for (int i = 1; i < n; i++)
-    {
-        if (v[i].second < to)
-            continue;
-        from = v[i].second;
-        to = v[i].first;
-        ret++;
-    }
-    cout << ret << '\n';
-    return 0;
+	scanf("%d", &n);
+	for (int i = 2; i <= n; i++)
+	{
+		if (che[i])
+			continue;
+		for (int j = 2 * i; j <= n; j += i)
+		{
+			che[j] = 1;
+		}
+	}
+	for (int i = 2; i <= n; i++)
+	{
+		if (!che[i])
+			a[p++] = i;
+	}
+	while (1)
+	{
+		if (sum >= n)
+			sum -= a[lo++];
+		else if (hi == p)
+			break;
+		else
+			sum += a[hi++];
+		if (sum == n)
+			ret++;
+	}
+	printf("%d\n", ret);
 }
