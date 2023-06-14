@@ -1,35 +1,36 @@
 #include <bits/stdc++.h>
 using namespace std;
-bool che[4000001];
-int n, a[2000001], p, lo, hi, ret, sum;
-
+void fastIO()
+{
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+}
+int n, m, idx, ret, b;
 int main()
 {
-	scanf("%d", &n);
-	for (int i = 2; i <= n; i++)
+	fastIO();
+	cin >> n >> m;
+	vector<pair<int, int>> a(n);
+	for (int i = 0; i < n; i++)
+		cin >> a[i].first >> a[i].second;
+	sort(a.begin(), a.end());
+	for (int i = 0; i < n; i++)
 	{
-		if (che[i])
+		if (a[i].second <= idx)
 			continue;
-		for (int j = 2 * i; j <= n; j += i)
+		if (idx < a[i].first)
 		{
-			che[j] = 1;
+			b = (a[i].second - a[i].first) / m + ((a[i].second - a[i].first) % m ? 1 : 0);
+			idx = a[i].first + b * m;
 		}
-	}
-	for (int i = 2; i <= n; i++)
-	{
-		if (!che[i])
-			a[p++] = i;
-	}
-	while (1)
-	{
-		if (sum >= n)
-			sum -= a[lo++];
-		else if (hi == p)
-			break;
 		else
-			sum += a[hi++];
-		if (sum == n)
-			ret++;
+		{
+			b = (a[i].second - idx) / m + ((a[i].second - idx) % m ? 1 : 0);
+			idx = idx + b * m;
+		}
+		ret += b;
 	}
-	printf("%d\n", ret);
+	cout << ret << "\n";
+	return 0;
 }
