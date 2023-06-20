@@ -1,32 +1,18 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define first f
-#define second s
 typedef long long ll;
-ll n, m, a[300004], ret = 1e18;
-bool check(ll mid)
-{
-    ll num = 0;
-    for (int i = 0; i < m; i++)
-    {
-        num += a[i] / mid;
-        if (a[i] % mid)
-            num++;
-    }
-    return n >= num;
-}
+ll a, b, mid, ret = -1;
 int main()
 {
-    cin >> n >> m;
-    ll lo = 1, hi = 0, mid;
-    for (int i = 0; i < m; i++)
-        cin >> a[i], hi = max(hi, a[i]);
+    cin >> a >> b;
+    ll z = b * 100 / a;
+    ll lo = 1, hi = 1e9;
     while (lo <= hi)
     {
         mid = (lo + hi) / 2;
-        if (check(mid))
+        if ((b + mid) * 100 / (a + mid) > z)
         {
-            ret = min(ret, mid);
+            ret = mid;
             hi = mid - 1;
         }
         else
