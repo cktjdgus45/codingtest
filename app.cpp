@@ -1,23 +1,22 @@
-#include <bits/stdc++.h>
+#include <cstdio>
+#include <vector>
+#include <iostream>
 using namespace std;
-typedef long long ll;
-ll a, b, mid, ret = -1;
+int dp[10001];
+int n, k, temp;
 int main()
 {
-    cin >> a >> b;
-    ll z = b * 100 / a;
-    ll lo = 1, hi = 1e9;
-    while (lo <= hi)
+    scanf("%d %d", &n, &k);
+    dp[0] = 1;
+    for (int i = 1; i <= n; i++)
     {
-        mid = (lo + hi) / 2;
-        if ((b + mid) * 100 / (a + mid) > z)
+        scanf("%d", &temp);
+        if (temp >= 10001)
+            continue;
+        for (int j = temp; j <= k; j++)
         {
-            ret = mid;
-            hi = mid - 1;
+            dp[j] += dp[j - temp];
         }
-        else
-            lo = mid + 1;
-    }
-    cout << ret << "\n";
-    return 0;
+    };
+    printf("%d\n", dp[k]);
 }
