@@ -1,43 +1,39 @@
-#include <algorithm>
-#include <cstdio>
+#include <bits/stdc++.h>
 using namespace std;
-int n, w, px[1003], py[1003], dp[1003][1003], y, x;
-int d(int a, int b)
-{
-    return abs(px[a] - px[b]) + abs(py[a] - py[b]);
-}
-int getSum(int a, int b)
-{
-    if (a == w + 1 || b == w + 1)
-        return 0;
-    if (dp[a][b])
-        return dp[a][b];
-    int next = max(a, b) + 1;
-    return dp[a][b] = min(getSum(a, next) + d(b, next), getSum(next, b) + d(a, next));
-}
-void solve()
-{
-    int a = 0, b = 1;
-    for (int i = 2; i < w + 2; i++)
-    {
-        if (dp[i][b] + d(a, i) < dp[a][i] + d(b, i))
-            puts("1"), a = i;
-        else
-            puts("2"), b = i;
-    }
-    return;
-}
+const int max_n = 104;
+int dy[4] = {-1, 0, 1, 0};
+int dx[4] = {0, 1, 0, -1};
+int n, m, a[max_n][max_n], visited[max_n][max_n], y, x;
+
 int main()
 {
-    scanf("%d %d", &n, &w);
-    px[0] = 1, py[0] = 1;
-    px[1] = n, py[1] = n;
-    for (int i = 2; i < w + 2; i++)
+    scanf("%d %d", &n, &m);
+    for (int i = 0; i < n; i++)
     {
-        scanf("%d %d", &y, &x);
-        px[i] = x, py[i] = y;
+        for (int j = 0; j < m; j++)
+        {
+            scanf("%1d", &a[i][j]);
+        }
     }
-    printf("%d\n", getSum(0, 1));
-    solve();
+    queue<pair<int, int>> q;
+    visited[0][0] = 1;
+    q.push({0, 0});
+    while (q.size())
+    {
+        tie(y, x) = q.front();
+        q.pop();
+        for (int i = 0; i < 4; i++)
+        {
+            int ny = y + dy[i];
+            int nx = x + dx[i];
+            if (ny < 0 || ny >= n || nx < 0 || nx >= m || a[ny][nx] == 0)
+                continue;
+            if (visited[ny][nx])
+                continue;
+            visited[ny][nx] = visited[y][x] + 1;
+            q.push({ny, nx});
+        }
+    }
+    printf("%d", visited[n - 1][m - 1]);
     return 0;
 }
