@@ -1,39 +1,25 @@
 #include <bits/stdc++.h>
 using namespace std;
-const int max_n = 104;
-int dy[4] = {-1, 0, 1, 0};
-int dx[4] = {0, 1, 0, -1};
-int n, m, a[max_n][max_n], visited[max_n][max_n], y, x;
+int dp[1004][2][34], n, m, b[1004];
+
+int go(int idx, int tree, int cnt)
+{
+    if (cnt < 0)
+        return -1e9;
+    if (idx == n)
+        return 0;
+    int &ret = dp[idx][tree][cnt];
+    if (~ret)
+        return ret;
+    return ret = max(go(idx + 1, tree ^ 1, cnt - 1), go(idx + 1, tree, cnt)) + (tree == b[idx] - 1); // 부분최적해합->global합. ,그대로있거나,움직이거나
+}
 
 int main()
 {
-    scanf("%d %d", &n, &m);
+    memset(dp, -1, sizeof(dp));
+    cin >> n >> m;
     for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < m; j++)
-        {
-            scanf("%1d", &a[i][j]);
-        }
-    }
-    queue<pair<int, int>> q;
-    visited[0][0] = 1;
-    q.push({0, 0});
-    while (q.size())
-    {
-        tie(y, x) = q.front();
-        q.pop();
-        for (int i = 0; i < 4; i++)
-        {
-            int ny = y + dy[i];
-            int nx = x + dx[i];
-            if (ny < 0 || ny >= n || nx < 0 || nx >= m || a[ny][nx] == 0)
-                continue;
-            if (visited[ny][nx])
-                continue;
-            visited[ny][nx] = visited[y][x] + 1;
-            q.push({ny, nx});
-        }
-    }
-    printf("%d", visited[n - 1][m - 1]);
+        cin >> b[i]; // 자두떨어질 나무 순서도.
+    cout << max(go(0, 1, m - 1), go(0, 0, m)) << "\n";
     return 0;
 }
