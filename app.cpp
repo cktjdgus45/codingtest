@@ -1,30 +1,30 @@
 #include <bits/stdc++.h>
 using namespace std;
-int n, m, j, l, r, temp, ret;
-int main()
-{
-    cin >> n >> m >> j;
-    l = 1;
-    for (int i = 0; i < j; i++)
-    {
-        r = l + m - 1;
-        cin >> temp;
-        if (temp >= l && temp <= r)
-            continue;
-        else
-        {
-            if (temp < l)
-            {
-                ret += (l - temp);
-                l = temp;
-            }
-            else
-            {
-                l += (temp - r);
-                ret += (temp - r);
-            }
-        }
+int n,r,temp,root;
+vector<int>adj[54];
+int dfs(int here){
+    int ret = 0;
+    int child = 0;
+    for(int there:adj[here]){
+        if(there == r) continue;
+        ret += dfs(there);
+        child++;
     }
-    cout << ret << "\n";
+    if(child== 0) return 1; //leaf
+    return ret;
+}
+int main(){
+    ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+    cin >> n;
+    for(int n = 0; i< n; i++){
+        cin >> temp;
+        if(temp == -1) root = i;
+        else adj[temp].push_back(i);
+    }
+    cin >> r;
+    if(r==root){
+        cout << 0 << "\n"; return 0;
+    }
+    cout << dfs(root) << "\n";
     return 0;
 }
