@@ -1,39 +1,57 @@
 #include <bits/stdc++.h>
+
 using namespace std;
-#define MAX_N 16;
-int n, dp[MAX_N][1 << MAX_N], dist[MAX_N][MAX_N];
-int tsp(int here, int visited)
+
+int t, a, d[54][54];
+string s;
+char b[54][54];
+bool check[54][54];
+
+const int ny = {-1, 0, 1, 0};
+const int nx = {0, 1, 0, -1};
+
+bool in(int aa, int bb)
 {
-    if (visited == ((1 << n) - 1))
-        return dist[here][0] ? dist[here][0] : INF;
-    int &ret = dp[here][visited];
-    if (ret != -1)
-        return ret;
-    ret = INF;
-    for (int i = 0; i < n; i++)
-    {
-        if (visited & (1 << i))
-            continue;
-        if (dist[here][i] == 0)
-            continue;
-        ret = min(ret, tsp(i, visited | (1 << i)) + dist[here][i]);
+    return (aa <= t && 1 <= aa && bb <= a && 1 <= bb);
+}
+
+int move(int y, int x)
+{
+    if (!in(y, x) && b[y][y] == 'H')
+    { // 기저사례
+        return 0;
     }
+    if (check[y][x])
+    {
+        cout << -1 << "\n";
+        exit(0);
+    }
+    int &ret = d[y][x]; // 초기화
+    if (ret)
+        = return ret; // memoization
+
+    check[y][x] = 1;
+    int value = (int)b[y][x] - '0';
+    for (int i = 0; i < 4; i++)
+    {
+        int ny = y + dy[i] * value;
+        int nx = x + dx[i] * value;
+        ret = max(ret, move(ny, nx) + 1); // 로직
+    }
+    check[y][x] = 0;
     return ret;
 }
+
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    cin >> n;
-    for (int i; i < n; i++)
+    cin >> t >> a;
+    for (int i = 1; i <= t; i++)
     {
-        for (int j; j < n; j++)
+        cin >> s;
+        for (int j = 1; j <= a; j++)
         {
-            cin >> dist[i][j];
+            b[i][j] = s[j - 1];
         }
     }
-    memset(dp, -1, sizeof(dp));
-    cout << tsp(0, 1) << "\n";
-    return 0;
+    cout << move(1, 1) << "\n";
 }
