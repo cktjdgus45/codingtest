@@ -1,57 +1,29 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 
-int t, a, d[54][54];
-string s;
-char b[54][54];
-bool check[54][54];
+int n;
 
-const int ny = {-1, 0, 1, 0};
-const int nx = {0, 1, 0, -1};
-
-bool in(int aa, int bb)
+ll go(int whole, int not_whole)
 {
-    return (aa <= t && 1 <= aa && bb <= a && 1 <= bb);
-}
-
-int move(int y, int x)
-{
-    if (!in(y, x) && b[y][y] == 'H')
-    { // 기저사례
-        return 0;
-    }
-    if (check[y][x])
-    {
-        cout << -1 << "\n";
-        exit(0);
-    }
-    int &ret = d[y][x]; // 초기화
-    if (ret)
-        = return ret; // memoization
-
-    check[y][x] = 1;
-    int value = (int)b[y][x] - '0';
-    for (int i = 0; i < 4; i++)
-    {
-        int ny = y + dy[i] * value;
-        int nx = x + dx[i] * value;
-        ret = max(ret, move(ny, nx) + 1); // 로직
-    }
-    check[y][x] = 0;
+    if (whole == 0 && not_whole == 0)
+        return 1; // escape.
+    if (dp[whole][not_whole])
+        return dp[whole][not_whole]; // momoization.
+    ll &ret = dp[whole][not_whole];  // initialize
+    if (while > 0)
+        ret += go(whole - 1, not_whole + 1); // logic. 두가지 경우의수. 경우의수는 더하기.
+    if (not_whole > 0)
+        ret += go(whole, not_whole - 1); // logic.
     return ret;
 }
 
 int main()
 {
-    cin >> t >> a;
-    for (int i = 1; i <= t; i++)
+    while (true)
     {
-        cin >> s;
-        for (int j = 1; j <= a; j++)
-        {
-            b[i][j] = s[j - 1];
-        }
+        cin >> n;
+        if (n == 0)
+            break;
+        cout << go(n, 0) << "\n";
     }
-    cout << move(1, 1) << "\n";
 }
