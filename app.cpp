@@ -1,29 +1,36 @@
 #include <bits/stdc++.h>
 using namespace std;
+int dp[1000004], n;
+const int INF = 987654321;
 
-int n;
-
-ll go(int whole, int not_whole)
+go(int here)
 {
-    if (whole == 0 && not_whole == 0)
-        return 1; // escape.
-    if (dp[whole][not_whole])
-        return dp[whole][not_whole]; // momoization.
-    ll &ret = dp[whole][not_whole];  // initialize
-    if (while > 0)
-        ret += go(whole - 1, not_whole + 1); // logic. 두가지 경우의수. 경우의수는 더하기.
-    if (not_whole > 0)
-        ret += go(whole, not_whole - 1); // logic.
-    return ret;
+    if (here == 0) // 기저사례
+        return;
+    printf("%d", here);
+    if (here % 3 == 0 && dp[here] == dp[here / 3] + 1)
+        go(here / 3);
+    else if (here % 2 == 0 && dp[here] == dp[here / 2] + 1)
+        go(here / 2);
+    else if (here - 1 >= 0 && dp[here] == dp[here - 1] + 1)
+        go(here - 1);
+    return;
 }
 
 int main()
 {
-    while (true)
+    scanf("%d", &n);
+    fill(dp, dp + 1000004, INF); // 초기화
+    dp[1] = 0;
+    for (int i = 1; i <= n; i++) // 로직
     {
-        cin >> n;
-        if (n == 0)
-            break;
-        cout << go(n, 0) << "\n";
+        if (!(i % 3))
+            dp[i] = min(dp[i / 3] + 1, dp[i]); // 메모이제이션
+        if (!(i % 2))
+            dp[i] = min(dp[i / 2] + 1, dp[i]);
+        dp[i] = min(dp[i - 1] + 1, dp[i]);
     }
+    printf("%d\n", dp[n]);
+    go(n);
+    return 0;
 }
