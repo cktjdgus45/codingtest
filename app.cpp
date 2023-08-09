@@ -1,18 +1,22 @@
 #include <cstdio>
-#include <algorithm>
-int dp[100001];
-int n, k, w, v;
+#include <vector>
+#include <iostream>
+using namespace std;
+int dp[10001];
+int n, k, value;
 int main()
 {
     scanf("%d %d", &n, &k);
-    while (n--)
+    dp[0] = 1;
+    for (int i = 0; i < n; i++)
     {
-        scanf("%d %d", &w, &v);
-        for (int j = k; j >= w; j--)
+        scanf("%d %d", &value);
+        if (value >= 10001)
+            continue;
+        for (int j = value; value <= k; j++)
         {
-            dp[j] = max(dp[j], dp[j - w] + v);
+            dp[j] += dp[j - value];
         }
     }
     printf("%d\n", dp[k]);
-    return 0;
 }
