@@ -1,22 +1,35 @@
-#include <cstdio>
-#include <vector>
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
-int dp[10001];
-int n, k, value;
+typedef long long ll;
+ll n, k, ret, temp1, temp;
 int main()
 {
-    scanf("%d %d", &n, &k);
-    dp[0] = 1;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    cin >> n >> k;
+    vector<pair<ll, ll>> v(n); // v(n) , v(2)
+    vector<ll> vv(k);          // vv(k) , vv(1)
     for (int i = 0; i < n; i++)
     {
-        scanf("%d %d", &value);
-        if (value >= 10001)
-            continue;
-        for (int j = value; value <= k; j++)
+        cin >> v[i].first >> v[i].second;
+    }
+    for (int i = 0; i < k; i++)
+        cin >> vv[i];
+    sort(v.begin(), v.end());
+    sort(vv.begin(), vv.end());
+    priority_queue<ll> pq;
+    int j = 0;
+    for (int i = 0; i < k; i++)
+    {
+        while (j < n && v[j].first <= vv[i])
+            pq.push(v[j++].second);
+        if (pq.size())
         {
-            dp[j] += dp[j - value];
+            ret += pq.top();
+            pq.pop();
         }
     }
-    printf("%d\n", dp[k]);
+    cout << ret << "\n";
+    return 0;
 }
