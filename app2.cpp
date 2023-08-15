@@ -1,33 +1,36 @@
-#include <iostream>
-#include <algorithm>
-#include <vector>
-#include <stack>
-#include <cstdio>
+#include <bits/stdc++.h>
 using namespace std;
-long long s, e, cnt[100001], a[100001];
-long long ret;
+void fastIO()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+}
+int n, m, idx, ret, b;
 int main()
 {
-    scanf("%d", &n);
+    fastIO();
+    cin >> n >> m;
+    vector<pair<int, int>> a(n);
+    for (int i = 0; i < n; i++)
+        cin >> a[i].first >> a[i].second;
+    sort(a.begin(), a.end());
     for (int i = 0; i < n; i++)
     {
-        scanf("%lld", a + i);
-    }
-    while (e < n)
-    {
-        if (!cnt[a[e]])
+        if (a[i].second < idx)
+            continue;
+        if (idx < a[i].first)
         {
-            cnt[a[e]]++;
-            e++;
+            b = (a[i].second - a[i].first) / m + ((a[i].second - a[i].first) % m ? 1 : 0);
+            idx = a[i].first + b * m;
         }
         else
         {
-            ret += e - s;
-            cnt[a[s]]--;
-            s++;
+            b = (a[i].second - idx) / m + ((a[i].second - idx) % m ? 1 : 0);
+            idx = idx + b * m;
         }
+        ret += b;
     }
-    ret += (long long)(e - s) * (e - s + 1) / 2;
-    printf("%lld\n", ret);
+    cout << ret << "\n";
     return 0;
 }
