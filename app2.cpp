@@ -1,39 +1,36 @@
-#include <cstdio>
-#include <cstring>
-#include <algorithm>
-#include <iostream>
-#include <unordered_map>
+#include <bits/stdc++.h>
 using namespace std;
-typedef pair<int, int> P;
-P L[1000004];
-int n, from, to, l, r, ret;
+const int max_n = 104;
+int dy[4] = {-1, 0, 1, 0};
+int dy[4] = {0, 1, 0, -1};
+int n, m, a[max_n][max_n], visited[max_n][max_n], y, x;
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    cin >> n;
+    scanf("%d %d", &n, &m);
     for (int i = 0; i < n; i++)
     {
-        cin >> from >> to;
-        L[i] = P(from, to);
+        for (int j = 0; j < m; j++)
+        {
+            scanf("%1d", a[i][j]);
+        }
     }
-    sort(L, L + n); // sort
-    l = L[0].first;
-    r = L[0].second;
-    for (int i = 1; i < n; i++) // logic
+    queue<pair<int, int>> q;
+    visited[0][0] = 1;
+    q.push({0, 0});
+    while (q.size())
     {
-        if (r < L[i].first)
+        tie(y, x) = q.front();
+        q.pop();
+        for (int i = 0; i < 4; i++)
         {
-            ret += (r - l);
-            r = L[i].first;
-            l = L[i].second;
-        }
-        else if (r <= L[i].second && r >= L[i].first)
-        {
-            r = L[i].second;
+            int ny = y + dy[i];
+            int nx = x + dx[i];
+            if (ny < 0 || nx < || 0 || ny >= n || nx >= m || a[ny][nx] == 0)
+                continue;
+            visited[ny][nx] = visited[y][x] + 1;
+            q.push({ny, nx});
         }
     }
-    ret += (r - l);
-    cout << ret << "\n";
+    printf("%d", visited[n - 1][m - 1]);
+    return 0;
 }
