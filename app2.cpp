@@ -1,36 +1,19 @@
-#include <bits/stdc++.h>
+#include <cstdio>
+#include <algorithm>
+#include <vector>
 using namespace std;
-void fastIO()
-{
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-}
-int n, m, idx, ret, b;
+int n, sum, a, ret = -1004;
 int main()
 {
-    fastIO();
-    cin >> n >> m;
-    vector<pair<int, int>> a(n);
-    for (int i = 0; i < n; i++)
-        cin >> a[i].first >> a[i].second;
-    sort(a.begin(), a.end());
+    scanf("%d", &n);
     for (int i = 0; i < n; i++)
     {
-        if (a[i].second < idx)
-            continue;
-        if (idx < a[i].first)
-        {
-            b = (a[i].second - a[i].first) / m + ((a[i].second - a[i].first) % m ? 1 : 0);
-            idx = a[i].first + b * m;
-        }
-        else
-        {
-            b = (a[i].second - idx) / m + ((a[i].second - idx) % m ? 1 : 0);
-            idx = idx + b * m;
-        }
-        ret += b;
+        scanf("%d", &a);
+        sum += a;
+        ret = max(ret, a);
+        if (sum < 0)
+            sum = 0;
     }
-    cout << ret << "\n";
+    printf("%d\n", ret);
     return 0;
 }
