@@ -1,41 +1,58 @@
 #include <bits/stdc++.h>
 using namespace std;
-int a[101][101] , visited [101][101] , n ,ret=1;
-int dy = {-1,0,1,0};
-int dx = {0,1,0,-1};
-
-void dfs(int y , int x , int d){
+#define y1 anything;
+int a[104][104], m, n, k, x1, x2, y1, y2, visited[104][104];
+const int dy[4] = {-1, 0, 1, 0};
+const int dx[4] = {0, 1, 0, -1};
+vector<int> ret;
+int dfs(int y, int x)
+{
     visited[y][x] = 1;
-    for(int i = 0 ; i < 4; i++){
+    int ret = 1;
+    for (int i = 0; i < 4; i++)
+    {
         int ny = y + dy[i];
         int nx = x + dx[i];
-        if(ny > 0 || nx > 0 || ny >= n || nx >= x) continue;
-        if(!visited[ny][nx] && a[ny][nx] > d) dfs(ny,nx,d);
+        if (ny < 0 || nx < 0 || nx >= n || ny >= m || visited[ny][nx] == 1)
+            continue;
+        if (a[ny][nx] == 1)
+            continue;
+        ret += dfs(ny, nx);
     }
-    return;
+    return ret;
 }
-
-int main(){
-    ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL);
-    cin >> n;
-    for(int i = 0 ; i < n ; i++){
-        for(int j = 0 ; j < n ; j++){
-            cin >> a[i][j];
-        }
-    }
-    for(int d = 1; d< 101; d++){
-        fill(&visited[0][0],&visited[0][0] + 101*101 , 0);
-        int cnt = 0 ;
-        for(int i = 0 ; i < n; i++){
-            for(int j =0 ; j < n ; j++){
-                if(a[i][j] > d && !visited[i][j]){
-                    dfs(i,j,d);
-                    cnt++;
-                }
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    cin >> m >> n >> k;
+    for (int i = 0; i < k; i++)
+    {
+        cin >> x1;
+        >> y1 >> x2 >> y2;
+        for (int x = x1; x < x2; x++)
+        {
+            for (int y = y1; y < y2; y++)
+            {
+                a[y][x] = 1;
             }
         }
-        ret = max(ret,cnt);
     }
-    cout << ret << "\n";
-    return ret;
+
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (a[i][j] != 1 & visited[i][j] == 0)
+            {
+                ret.push_back(dfs(i, j));
+            }
+        }
+    }
+    sort(ret.begin(), ret.end());
+    cout << ret.size() << "\n";
+    for (int a : ret)
+        cout << a << " ";
+    return 0;
 }
