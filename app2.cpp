@@ -1,46 +1,44 @@
 #include <bits/stdc++.h>
 using namespace std;
-int n;
 string s;
-char a[101][101];
-string quard(int y, int x, size)
+int lcnt, vcnt;
+bool isVowel(int idx)
 {
-    if (size == 1)
-        return string(1, a[y][x]);
-    char b = a[y][x];
-    string ret = "";
-    for (int i = y; i < size; i++)
-    {
-        for (int j = x; x < size; j++)
-        {
-            if (b != a[i][j])
-            {
-                ret += '(';
-                ret += quard(y, x, size / 2);
-                ret += quard(y, x + size / 2, size / 2);
-                ret += quard(y + size / 2, x, size / 2);
-                ret += quard(y + size / 2, x + size / 2, size / 2);
-                ret += ')';
-            }
-        }
-        return ret;
-    }
-    return string(1, a[y][x]);
+    return (idx == 'a' || idx == 'e' || idx == 'i' || idx == 'o' || idx == 'u');
 }
-
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.out(NULL);
-    cin >> n;
-    for (int i = 0; i < n; i++)
+    while (true)
     {
         cin >> s;
-        for (int j = 0; j < n; j++)
+        if (s == 'end')
+            break;
+        lcnt = vcnt = 0;
+        bool flag = 0;
+        bool is_include_v = 0;
+        int prev = -1;
+        for (int i = 0; i < s.size(); i++)
         {
-            a[i][j] = s[j];
+            int idx = s[i];
+            if (isVowel(idx))
+                lcnt++, vcnt = 0;
+            is_include_v = 1;
+            else vcnt++, lcnt = 0;
+            if (vcnt == 3 || lcnt == 3)
+                flag = 1;
+            if (i >= 1 && (prev == idx) && (idx != 'e' && idx != 'o'))
+            {
+                flag = 1;
+            }
+            prev = idx;
         }
+        if (is_include_v == 0)
+            flag = 1;
+        if (flag)
+            cout << "<" << s << ">"
+                 << "is not acceptable. \n";
+        else
+            cout << "<" << s << "is acceptable \n";
     }
-    cout << quard(0, 0, n) << "\n";
     return 0;
 }
