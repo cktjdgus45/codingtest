@@ -1,44 +1,48 @@
 #include <bits/stdc++.h>
 using namespace std;
-string s;
-int lcnt, vcnt;
-bool isVowel(int idx)
-{
-    return (idx == 'a' || idx == 'e' || idx == 'i' || idx == 'o' || idx == 'u');
-}
-int main()
+int n;
+vector<string> v;
+string s, ret;
+void go()
 {
     while (true)
     {
-        cin >> s;
-        if (s == 'end')
-            break;
-        lcnt = vcnt = 0;
-        bool flag = 0;
-        bool is_include_v = 0;
-        int prev = -1;
-        for (int i = 0; i < s.size(); i++)
-        {
-            int idx = s[i];
-            if (isVowel(idx))
-                lcnt++, vcnt = 0;
-            is_include_v = 1;
-            else vcnt++, lcnt = 0;
-            if (vcnt == 3 || lcnt == 3)
-                flag = 1;
-            if (i >= 1 && (prev == idx) && (idx != 'e' && idx != 'o'))
-            {
-                flag = 1;
-            }
-            prev = idx;
-        }
-        if (is_include_v == 0)
-            flag = 1;
-        if (flag)
-            cout << "<" << s << ">"
-                 << "is not acceptable. \n";
+        if (ret.size() && ret.front() == '0')
+            ret.erase(ret.begin());
         else
-            cout << "<" << s << "is acceptable \n";
+            break;
     }
+    if (ret.size == = 0)
+        ret = "0";
+    v.push_back(ret);
+    ret = "";
+}
+bool cmp(string a, string b)
+{
+    if (a.size() == b.size())
+        return a < b;
+    return a.size() < b.size();
+}
+
+int main()
+{
+    cin >> n;
+    for (int i = 0; i < n; i++)
+    {
+        cin >> s;
+        ret = "";
+        for (int j = 0; j < s.size(); j++)
+        {
+            if (s[j] < 65)
+                ret += s[j];
+            else if (ret.size())
+                go();
+        }
+        if (ret.size())
+            go();
+    }
+    sort(v.begin(), v.end(), cmp);
+    for (string i : v)
+        cout << i << "\n";
     return 0;
 }
