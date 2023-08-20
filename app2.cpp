@@ -1,44 +1,25 @@
 #include <bits/stdc++.h>
 using namespace std;
-int n, m, a[104][104];
-string s;
+int n, a;
 int main()
 {
-    cin >> n >> m;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    cin >> n;
     for (int i = 0; i < n; i++)
     {
-        cin >> s;
-        for (int j = 0; j < m; j++)
+        cin >> a;
+        int ret2 = 0, ret5 = 0;
+        for (int j = 2; j <= a; j *= 2)
         {
-            if (s[j] == '.')
-                a[i][j] = -1;
-            else
-                a[i][j] = 0;
+            ret2 += a / j;
+        }
+        for (int j = 5; j <= a; j *= 5)
+        {
+            ret5 += a / j;
         }
     }
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < m; j++)
-        {
-            if (a[i][j] == 0)
-            {
-                int cnt = 1;
-                while (a[i][j + 1] == -1)
-                {
-                    a[i][j + 1] = cnt++;
-                    j++;
-                }
-            }
-        }
-    }
-
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < m; j++)
-        {
-            cout << a[i][j] << " ";
-            cout << "\n";
-        }
-    }
+    cout << min(ret2, ret5) << "\n";
     return 0;
 }
