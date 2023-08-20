@@ -1,48 +1,44 @@
 #include <bits/stdc++.h>
 using namespace std;
-int n;
-vector<string> v;
-string s, ret;
-void go()
-{
-    while (true)
-    {
-        if (ret.size() && ret.front() == '0')
-            ret.erase(ret.begin());
-        else
-            break;
-    }
-    if (ret.size == = 0)
-        ret = "0";
-    v.push_back(ret);
-    ret = "";
-}
-bool cmp(string a, string b)
-{
-    if (a.size() == b.size())
-        return a < b;
-    return a.size() < b.size();
-}
-
+int n, m, a[104][104];
+string s;
 int main()
 {
-    cin >> n;
+    cin >> n >> m;
     for (int i = 0; i < n; i++)
     {
         cin >> s;
-        ret = "";
-        for (int j = 0; j < s.size(); j++)
+        for (int j = 0; j < m; j++)
         {
-            if (s[j] < 65)
-                ret += s[j];
-            else if (ret.size())
-                go();
+            if (s[j] == '.')
+                a[i][j] = -1;
+            else
+                a[i][j] = 0;
         }
-        if (ret.size())
-            go();
     }
-    sort(v.begin(), v.end(), cmp);
-    for (string i : v)
-        cout << i << "\n";
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            if (a[i][j] == 0)
+            {
+                int cnt = 1;
+                while (a[i][j + 1] == -1)
+                {
+                    a[i][j + 1] = cnt++;
+                    j++;
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            cout << a[i][j] << " ";
+            cout << "\n";
+        }
+    }
     return 0;
 }
