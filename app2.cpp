@@ -1,16 +1,39 @@
 #include <bits/stdc++.h>
 using namespace std;
 int n;
+string s;
+bool check(string s)
+{
+    stack<char> stk;
+    for (char c : s)
+    {
+        if (c == '(')
+            stk.push(c);
+        else
+        {
+            if (!stk.empty())
+            {
+                stk.pop();
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+    return stk.empty();
+}
+
 int main()
 {
     cin >> n;
-    int i = 666;
-    for (;; i++)
+    for (int i = 0; i < n; i++)
     {
-        if (to_string(i).find("666") != string::npos)
-            n--; // 666 이 있다면 n--; i++하면서.
-        if (n == 0)
-            break;
+        cin >> s;
+        if (check(s))
+            cout << "YES\n";
+        else
+            cout << "NO\n";
     }
-    cout << i << "\n";
+    return 0;
 }
