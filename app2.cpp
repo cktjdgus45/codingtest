@@ -1,6 +1,20 @@
-#include <bits/stdc++.h>
-using namespace std;
-int n, a;
+#define prev cha;
+int n, o, A, B, asum, bsum;
+string s, prev;
+string print(int a)
+{
+    string d = "00" + to_string(a / 60);
+    string e = "00" + to_string(a % 60);
+    return d.substr(d.size() - 2, 2) + ":" + e.substr(e.size() - 2, 2);
+}
+int changeToInt(string a)
+{
+    return atoi(a.substr(0, 2).c_str()) * 60 + atoi(a.substr(3, 2).c_str());
+}
+void go(int &sum, string s)
+{
+    sum += (changeToInt(s) - changeToInt(prev));
+}
 int main()
 {
     ios_base::sync_with_stdio(false);
@@ -9,17 +23,19 @@ int main()
     cin >> n;
     for (int i = 0; i < n; i++)
     {
-        cin >> a;
-        int ret2 = 0, ret5 = 0;
-        for (int j = 2; j <= a; j *= 2)
-        {
-            ret2 += a / j;
-        }
-        for (int j = 5; j <= a; j *= 5)
-        {
-            ret5 += a / j;
-        }
+        cin >> o >> s;
+        if (A > B)
+            go(asum, s);
+        else if (A < B)
+            go(bsum, s);
+        o == 1 ? A++ : B++;
+        prev = s;
     }
-    cout << min(ret2, ret5) << "\n";
+    if (A > B)
+        go(asum, "48:00");
+    else if (A < B)
+        go(bsum, "48:00");
+    cout << print(asum) << "\n";
+    cout << print(bsum) << "\n";
     return 0;
 }
