@@ -1,63 +1,41 @@
 #include <bits/stdc++.h>
 using namespace std;
-int a[104][104], visited[104][104];
-int dy[] = {-1, 0, 1, 0}, dx[] = {0, 1, 0, -1};
-int n, m, cnt, cnt2;
-vector<pair<int, int>> v;
-void go(iny y, int x)
+
+vector<int> adj[10001];
+int dp[10001], mx, visited[10001], n, m, a, b;
+
+int dfs(int here)
 {
-    visited[y][x] = 1;
-    if (a[y][x] == 1)
+    visited[here] = 1;
+    int ret = 1;
+    for (int there : adj[here])
     {
-        v.push_back({y, x});
-        return;
-    }
-    for (int i = 0; i < 4; i++)
-    {
-        int ny = y + dy[i];
-        int nx = x + dx[i];
-        if (ny < 0 || ny >= n || nx < 0 || nx >= m || visited[ny][nx])
+        if (visited[there])
             continue;
-        go(ny, nx);
+        ret += dfs(there);
     }
-    return;
+    return ret;
 }
 
 int main()
 {
-    // set-up
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
     cin >> n >> m;
+    while (m--)
+    {
+        cin >> a >> b;
+        adj[b].push_back(a);
+    }
     for (int i = 0; i < n; i++)
     {
-        for (int j = 0; j < m; j++)
-        {
-            cin >> a[i][j];
-        }
+        memset(visited, 0, sizeof(visited));
+        dp[i] = dfs(i);
+        mx = max(dp[i], mx);
     }
-    while (true)
-    {
-        cnt2 = 0;
-        fill(&visited[0][0], &visited[0][0] + 104 * 104, 0);
-        v.clear();
-        go(0, 0);
-        for (pair<int, int> b : v)
-        {
-            cnt2++;
-            a[b.first][b.second] = 0;
-        }
-        bool flag = 0;
-        for (int i = 0; i < n; i++)
-        {
-            for (int j = 0; j < m; j++)
-            {
-                if (a[i][j] != 0)
-                    flag = 1;
-            }
-        }
-        cnt++;
-        if (!flag)
-            break;
-    }
-    cout << cnt << cnt2 << "\n";
-    return;
+    for (int i = 1; i <= n; i++)
+        if (mx == dp[i])
+            cout << i << " ";
+    return 0;
 }
