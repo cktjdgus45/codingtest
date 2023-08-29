@@ -3,49 +3,40 @@
 #include <vector>
 #include <queue>
 using namespace std;
-int V, E, K, u, v, w;
-vector<pair<int, int>> adj[20001];
-int dist[20001];
-const int INF = 987654321;
-priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-int main()
-{
-	// set-up
-	scanf("%d %d %d", &V, &E, &K);
-	fill(dist, dist + 20001, INF);
-	for (int i = 0; i < E; i++)
-	{
-		scanf("%d %d %d", &u, &v, &w);
-		adj[u].push_back(make_pair(w, v));
-	}
-	pq.push(make_pair(0, K)); // adj (w,v) == pt (w.v)
-	dist[K] = 0;			  // dist[V] = w(E);
+const int max_n = 130;
+priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> pq;
+int N,INF = 987654321,a[max_n][max_n],dist[max_n][max_n],t;
+const int dy[4] = {-1,0,1,0};
+const int dx[4] = {0,1,0,-1};
 
-	// Dijkstra
-	while (pq.size())
-	{
-		int here = pq.top().second;
-		int here_dist = pq.top().first;
-		pq.pop();
-		if (dist[here] != here_dist)
-			continue;
-		for (pair<int, int> there : adj[here])
-		{
-			int _there = there.second;
-			int _there_dist = there.first;
-			if (dist[_there] > dist[here] + _there_dist)
-			{
-				dist[_there] = dist[here] + _there_dist;
-				pq.push(dist[_there], _there);
+int main(){
+	while(++t){
+		scanf("%d",&N);
+		fill(&a[0][0],&a[0][0]+max_n*max_n,0);
+		fill(&dist[0][0],&dist[0][0]+max_n*max_n,INF);
+		for(int i = 0 ; i  < N ; i++){
+			for(int j = 0 ; j< N;j++){
+				scanf("%d",&a[i][j]);
 			}
 		}
-	}
-	for (int i = 1; i <= V; i++)
-	{
-		if (dist[i] == INF)
-			pust("INF");
-		else
-			printf("%d", dist[i]);
+		pq.push(make_pair(a[0][0],0));
+		dist[0][0] = a[0][0];
+		while(pq.size()){
+			int herey = pq.top().second /1000;
+			int herex = pq.top().second %1000;
+			int here_dist = pq.top().first;
+			pq.pop();
+			if(dist[herey][herex] != here_dist) continue;
+			for(int i = 0 ; i < 4 ; i++){
+				int ny = y +dy[i];
+				int nx = x +dx[i];
+				if(dist[ny][nx] > dist[herey][herex] + here_dist){
+					dist[ny][nx] = dist[herey][herex] + here_dist;
+					pq.push(dist[ny][nx],ny*1000+nx);
+				}
+			}
+		}
+		printf("Problem %d: %d\n",t,dist[N-1][N-1]);
 	}
 	return 0;
 }
