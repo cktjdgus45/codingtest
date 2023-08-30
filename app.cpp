@@ -1,44 +1,40 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-int t, n, m, temp;
+ll n, m, a[300004], ret = 1e18;
 
-int binarySearch(int temp, vector<int> &v)
+bool check(ll mid)
 {
-	int l = 0;
-	int r = v.size() - 1;
-	int mid;
-	while (l <= r)
+	ll num = 0;
+	for (int i = 0; i < m; i++)
 	{
-		mid = (l + r) / 2;
-		if (v[mid] > temp)
-			r = mid - 1;
-		else if (v[mid] == temp)
-			return 1;
-		else
-			l = mid + 1;
+		num += a[i] / mid; // 4/3 =1 , 4%3 = 1 ,2¸í , 7/3 = 2¸í , 7%3 =1  ,3¸í mid =ÁúÅõ½É
+		if (a[i] % mid)
+			num++;
 	}
-	return 0;
+	return n >= num;
 }
 
 int main()
 {
-	scanf("%d", &t);
-	while (t--)
+	cin >> n >> m; // 5,2
+	ll lo = 1, hi = 0, mid;
+	for (int i = 0; i < m; i++)
 	{
-		vector<int> v;
-		scanf("%d", &n);
-		for (int i = 0; i < n; i++)
-		{ // ¼öÃ¸1
-			scanf("%d", &temp);
-			v.push_back(temp);
-		}
-		srot(v.begin(), v.end());
-		scanf("%d", &m);
-		for (int i = 0; i < m; i++)
-		{ // ¼öÃ¸2
-			scanf("%d", &temp);
-			binarySearch(temp, v);
-		}
+		cin >> a[i]; // 7,4
+		hi = max(hi, a[i]);
 	}
+	while (lo <= hi)
+	{
+		mid = (lo + hi) / 2;
+		if (check(mid))
+		{
+			ret = min(ret, mid);
+			hi = mid - 1;
+		}
+		else
+			lo = mid + 1;
+	}
+	cout << ret << "\n";
+	return 0;
 }
