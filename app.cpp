@@ -1,36 +1,44 @@
 #include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
-ll n, m, a[300004], ret = 1e18;
-
-bool check(ll mid)
+int n, m, mx, sum, ret, a[100004], lo, hi;
+bool check(int mid)
 {
-	ll num = 0;
-	for (int i = 0; i < m; i++)
+	if (mx > mid)
+		return false;
+	int temp = mid;
+	int cnt = 0;
+	for (int i = 0; i < n; i++)
 	{
-		num += a[i] / mid; // 4/3 =1 , 4%3 = 1 ,2명 , 7/3 = 2명 , 7%3 =1  ,3명 mid =질투심
-		if (a[i] % mid)
-			num++;
+		// 17
+		if (mid - a[i] < 0)
+		{
+			mid = temp;
+			cnt++
+		}
+		mid -= a[i];
 	}
-	return n >= num;
+	if (mid != temp)
+		cnt++;
+	return cnt <= m;
 }
-
 int main()
 {
-	cin >> n >> m; // 5,2
-	ll lo = 1, hi = 0, mid;
-	for (int i = 0; i < m; i++)
+	cin >> n >> m;
+	for (int i = 0; i < n; i++)
 	{
-		cin >> a[i]; // 7,4
-		hi = max(hi, a[i]);
+		cin >> a[i];
+		sum += a[i]; // 크기의 합.
+		mx = max(mx, a[i]);
 	}
+	lo = 0;
+	hi = sum;
 	while (lo <= hi)
 	{
-		mid = (lo + hi) / 2;
+		int mid = (lo + hi) / 2;
 		if (check(mid))
 		{
-			ret = min(ret, mid);
 			hi = mid - 1;
+			ret = mid;
 		}
 		else
 			lo = mid + 1;
