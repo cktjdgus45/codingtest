@@ -1,53 +1,30 @@
 #include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
-ll n, m, a[100004], mx, lo, hi, ret;
 
-void fastIO()
-{
-	ios::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-}
-
-bool check(ll mid)
-{
-	ll temp = mid;
-	ll cnt = 1;
-	for (int i = 0; i < n; i++)
-	{
-		if (mid - a[i] < 0)
-		{
-			mid = temp;
-			cnt++;
-		}
-		mid -= a[i];
-	}
-	return cnt <= m;
-}
+int n, m, t;
 
 int main()
 {
-	fastIO();
-	cin >> n >> m;
-	for (int i = 0; i < n; i++)
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+	cin >> t;
+	while (t--)
 	{
-		cin >> a[i];
-		mx = max(mx, a[i]);
-	}
-	lo = mx;
-	hi = 1000000004;
-	while (lo <= hi)
-	{
-		ll mid = (lo + hi) / 2;
-		if (check(mid))
+		int ret = 0;
+		cin >> n >> m;
+		vector<int> a(n), b(m);
+		for (int i = 0; i < n; i++)
+			cin >> a[i];
+		for (int i = 0; i < m; i++)
+			cin >> b[i];
+		sort(a.begin(), a.end());
+		sort(b.begin(), b.end());
+		for (int i = 0; i < n; i++)
 		{
-			hi = mid - 1;
-			ret = mid;
+			auto pos = lower_bound(b.begin(), b.end(), a[i]);
+			ret += (int)(pos - b.begin());
 		}
-		else
-			lo = mid + 1;
+		cout << ret << "\n";
 	}
-	cout << ret << "\n";
-	return 0;
 }
