@@ -1,40 +1,45 @@
 #include <bits/stdc++.h>
 using namespace std;
-int n, m, mx, sum, ret, a[100004], lo, hi;
-bool check(int mid)
+typedef long long ll;
+ll n, m, a[100004], mx, lo, hi, ret;
+
+void fastIO()
 {
-	if (mx > mid)
-		return false;
-	int temp = mid;
-	int cnt = 0;
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+}
+
+bool check(ll mid)
+{
+	ll temp = mid;
+	ll cnt = 1;
 	for (int i = 0; i < n; i++)
 	{
-		// 17
 		if (mid - a[i] < 0)
 		{
 			mid = temp;
-			cnt++
+			cnt++;
 		}
 		mid -= a[i];
 	}
-	if (mid != temp)
-		cnt++;
 	return cnt <= m;
 }
+
 int main()
 {
+	fastIO();
 	cin >> n >> m;
 	for (int i = 0; i < n; i++)
 	{
 		cin >> a[i];
-		sum += a[i]; // 크기의 합.
 		mx = max(mx, a[i]);
 	}
-	lo = 0;
-	hi = sum;
+	lo = mx;
+	hi = 1000000004;
 	while (lo <= hi)
 	{
-		int mid = (lo + hi) / 2;
+		ll mid = (lo + hi) / 2;
 		if (check(mid))
 		{
 			hi = mid - 1;
