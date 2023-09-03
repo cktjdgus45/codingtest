@@ -1,30 +1,21 @@
 #include <bits/stdc++.h>
 using namespace std;
-
-vector<pair<int, int>> v;
-
+string S, T, ret;
 int main()
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	cin >> n;
-	for (int i = 0; i < n; i++)
+	cin >> S >> T;
+	for (char a : S)
 	{
-		cin >> from >> to;
-		v.push_back({to, from});
+		ret += a;
+		if (ret.size() >= T.size() && ret.substr(ret.size() - T.size(), T.size()) == T)
+		{
+			ret.erase(ret.end() - T.size(), ret.end());
+		}
 	}
-	sort(v.begin(), v.end());
-	from = v[0].second;
-	to = v[0].first;
-	for (int i = 1; i < n; i++)
-	{
-		if (v[i].second < to)
-			continue;
-		to = v[i].first;
-		from = v[i].second;
-		ret++;
-	}
-	cout << ret << "\n";
+	if (!ret.size())
+		cout << "FRULA"
+			 << "\n";
+	else
+		cout << ret << "\n";
 	return 0;
 }
