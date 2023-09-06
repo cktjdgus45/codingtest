@@ -1,32 +1,38 @@
 #include <bits/stdc++.h>
 using namespace std;
-string S, T, ret;
-// stack<char> stk;
+typedef long long ll;
+ll n, k, ret;
+
 int main()
 {
-	cin >> S >> T;
-	for (char a : S)
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+	cin >> n >> k;
+	vector<pair<ll, ll>> v(n);
+	vector<ll> vv(k);
+	for (int i = 0; i < n; i++)
 	{
-		ret += a; // stk.push(a);
-		if (ret.size() >= T.size() && ret.substr(ret.size() - T.size(), T.size()) == T)
-		// if(stk.size()>=T.size()&&stk.top()==T[T.size()-1])
-		//{
-		//  string ss =""; ss+= stk.top(); stk.pop();
-		// }
-		// reverse(ss.begin(),ss.end());
-		// if(T!=ss)
-		//{
-		// for(int i : ss){ stk.push(i)};
-		//}
+		cin >> v[i].first >> v[i].second;
+	}
+	for (int i = 0; i < k; i++)
+	{
+		cin >> vv[i];
+	}
+	sort(v.begin(), v.end());	// 보석 무게,가치
+	sort(vv.begin(), vv.end()); // 가방 최대무게
+	priority_queue<ll> pq;		// 내림차순 , top == max.
+	int j = 0;
+	for (int i = 0; i < k; i++)
+	{
+		while (j < n && v[j].first <= vv[i])
+			pq.push(v[j++].second);
+		if (pq.size())
 		{
-			ret.erase(ret.end() - T.size(), ret.end());
+			ret += pq.top();
+			pq.pop();
 		}
 	}
-	// if(stk.size()==0){cout <<"FRULA"} else{ while(stk.size()) ret+=stk.top(); stk.pop();} reverse(ret.begin(); ret.end()); cout << ret<<"\n";
-	if (!ret.size())
-		cout << "FRULA"
-			 << "\n";
-	else
-		cout << ret << "\n";
+	cout << ret << "\n";
 	return 0;
 }
