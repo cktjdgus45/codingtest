@@ -1,33 +1,25 @@
 #include <bits/stdc++.h>
 using namespace std;
-
-const int max_n = 40;
-bool che[max_n + 1];
-
-vector<int> era(int max_n)
-{
-	vector<int> v;
-	for (int i = 2; i <= max_n; i++)
-	{
-		if (che[i])
-			continue;
-		for (int j = 2 * i; j <= max_n; j += i)
-		{
-			cout << j << "\n ";
-			che[j] = 1;
-		}
-	}
-	for (int i = 2; i <= max_n; i++)
-	{
-		if (che[i] == 0)
-			v.push_back(i);
-	}
-	return v;
-}
-
+int n, ret, x;
 int main()
 {
-	vector<int> a = era(max_n);
-	for (int i : a)
-		cout << i << " ";
+	cin >> n;
+	vector<int> a(n);
+	for (int i = 0; i < n; i++)
+		cin >> a[i];
+	cin >> x;
+	sort(a.begin(), a.end());
+	int l = 0;
+	int r = n - 1;
+	while (l < r)
+	{
+		if (a[l] + a[r] == x)
+			r--, ret++;
+		else if (a[l] + a[r] < x)
+			l++;
+		else if (a[l] + a[r] > x)
+			r--;
+	}
+	cout << ret << "\n";
+	return 0
 }
