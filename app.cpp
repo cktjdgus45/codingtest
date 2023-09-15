@@ -1,48 +1,85 @@
 #include <bits/stdc++.h>
 using namespace std;
+int n, ret;
 
-const int INF = 987654321;
-int s[24][24], ret = INF, n;
-
-int go(vector<int> &a, vector<int> &b)
+struct Board
 {
-    pair<int, int> ret;
-    for (int i = 0; i < n / 2; i++)
+    int a[24][24];
+    void move()
     {
-        for (int j = 0; j < n / 2; j++)
+        int temp[24][24];
+        for (int i = 0; i < n; i++)
         {
-            if (i == j)
-                continue;
-            ret.first += s[a[i]][a[j]];
-            ret.second += s[b[i]][b[j]];
+            int c = -1, d = 0;
+            for (int j = 0; j < n; j++)
+            {
+                if (a[i][j] == 0)
+                    continue;
+                if (d && a[i][j] == temp[i][c])
+                    temp[i][c] *= 2, d = 0;
+                else
+                    temp[i][++c] = a[i][j], d = 1; // push
+            }
+            for (c++; c < n; c++)
+                temp[i][c] = 0;
+        }
+        memcpy(a, temp, sizeof(a));
+    }
+    void rotate_90()
+    {
+        int temp[24][24];
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                temp[i][j] = a[n - j - 1][i];
+            }
+        }
+        memcpy(a, temp, sizeof(a));
+    }
+    void get_max()
+    {
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                ret = max(ret, a[i][j]);
+            }
         }
     }
-    return abs(ret.first - ret.second)
+};
+
+void go(Board c, int here)
+{
+    if (here == 5)
+    {
+        c.get_max(); // 한쪽방면 max값 축적.
+        return;
+    }
+    for (int i = 0; i < 4; i++)
+    {
+        Board d = c;
+        d.move();        // 한쪽으로 더하기(한쪽방면) ,한쪽으로 더하기(한쪽방면) ,한쪽으로 더하기(한쪽방면),한쪽으로 더하기(한쪽방면) (90도씩 회전후)
+        go(d, here + 1); // here=0 move ,here=1 move , here =2 move ... 총5번 이동.
+        d.rotate_90();   // 회전
+    }
 }
 
 int main()
 {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
     cin >> n;
+    Board c;
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < n; j++)
         {
-            cin >> s[i][j];
+            cin >> c.a[i][j];
         }
     }
-    for (int i = 0; i < (1 << n); i++)
-    {
-        if (__builtin_popcount(i) != n / 2)
-            continue;
-        vector<int> start, link;
-        for (int j = 0; j < n; j++)
-        {
-            if (i & (1 << j))
-                start.push_back(i);
-            else
-                link.push_back(j);
-        }
-        ret = min(ret, go(start, link));
-    }
-    cout << ret << '\n';
+    go(c, 0);
+    cout << ret << "\n";
+    return 0;
 }
