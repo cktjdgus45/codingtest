@@ -1,60 +1,69 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define time ff
-#define y1 cc
-typedef long long ll;
-int n, k, l, y, x, t, ret, idx, dir = 1;
-int a[104][104], visited[104][104], time;
-char c;
-deque<pair<int, int>> dq;
-vector<pair<int, int>> _time;
-const int dy[] = {-1, 0, 1, 0};
-const int dx[] = {0, 1, 0, -1};
+int n, k, a, b, ret;
+string s[1004];
+void rot(int pos, int dir)
+{
+    if (!dir)
+        rotate(s[pos].begin(), s[pos].begin() + 1, s[pos].end());
+    else
+        rotate(s[pos].begin(), s[pos].begin() + s[pos].size() - 1, s[pos].end());
+}
+
+int findL(int pos)
+{
+    for (int i = pos; i >= 1; i--)
+    {
+        if (s[i][6] == s[i - 1][2])
+        {
+            return i;
+        }
+    }
+}
+int findR(int pos)
+{
+    for (int i = pos; i <= n - 2; i--)
+    {
+        if (s[i][2] == s[i + 1][6])
+        {
+            return i;
+        }
+    }
+}
+
 int main()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cin >> n >> k;
+    cin >> n;
+    for (int i = 0; i < n; i++)
+    {
+        cin >> s[i];
+    }
+    cin >> k;
     for (int i = 0; i < k; i++)
     {
-        cin >> y >> x;
-        a[--y][--x] = 1;
+        cin >> a >> b;
+        a--;
+        b == (b == -1 ? 0 : 1);
     }
-    cin >> l;
-    for (int i = 0; i < l; i++)
+    int l = findL(a);
+    int r = findR(a);
+    int cnt = 0;
+    for (int pos = a + 1; pos >= l; pos--)
     {
-        cin >> t >> c;
-        if (c == 'D')
-            _time.push_back({t, 1});
-        else
-            _time.push_back({t, 3});
+        rot(pos, cnt % 2 == 0 ? b : !b); // 번갈아가며 방향 반대.
+        cnt++;
     }
-    dq.push_back({0, 0});
-    while (dq.size())
+    cnt = 1;
+    for (int pos = a + 1; pos <= r; pos++)
     {
-        time++;
-        tie(y, x) = dq.front();
-        int ny = y + dy[dir];
-        int nx = x + dx[dir];
-        if (ny >= n || ny < 0 || nx >= n || nx < 0 || visited[ny][nx])
-            break;
-
-        if (!a[ny][nx])
-        {
-            visited[dq.back().first][dq.back().second] = 0;
-            dq.pop_back();
-        }
-        else
-            a[ny][nx] = 0;
-
-        visited[ny][nx] = 1;
-        dq.push_front({ny, nx});
-        if (time == _time[idx].first)
-        {
-            dir = (dir + _time[idx].second) % 4;
-            idx++;
-        }
+        rot(pos, cnt % 2 == 0 ? b : !b); // 번갈아가며 방향 반대.
+        cnt++;
     }
-    cout << time << "\n";
+    for (int i = 0; i < n; i++)
+    {
+        if (s[i][0] == '1')
+            ret++;
+    }
+    cout << ret << "\n";
     return 0;
 }
