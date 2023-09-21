@@ -1,68 +1,38 @@
 #include <bits/stdc++.h>
 using namespace std;
-int n, k, a, b, ret;
-string s[1004];
-void rot(int pos, int dir)
-{
-    if (!dir)
-        rotate(s[pos].begin(), s[pos].begin() + 1, s[pos].end());
-    else
-        rotate(s[pos].begin(), s[pos].begin() + s[pos].size() - 1, s[pos].end());
-}
 
-int findL(int pos)
+int n, m, idx, ret, b;
+
+void fastIO()
 {
-    for (int i = pos; i >= 1; i--)
-    {
-        if (s[i][6] == s[i - 1][2])
-        {
-            return i;
-        }
-    }
-}
-int findR(int pos)
-{
-    for (int i = pos; i <= n - 2; i--)
-    {
-        if (s[i][2] == s[i + 1][6])
-        {
-            return i;
-        }
-    }
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
 }
 
 int main()
 {
-    cin >> n;
+    fastIO();
+    cin >> n >> m;
+    vector<pair<int, int>> a(n);
+    for (int i = 0; i < n; i++)
+        cin >> a[i].first >> a[i].second;
+    sort(a.begin(), a.end());
     for (int i = 0; i < n; i++)
     {
-        cin >> s[i];
-    }
-    cin >> k;
-    for (int i = 0; i < k; i++)
-    {
-        cin >> a >> b;
-        a--;
-        b == (b == -1 ? 0 : 1);
-    }
-    int l = findL(a);
-    int r = findR(a);
-    int cnt = 0;
-    for (int pos = a + 1; pos >= l; pos--)
-    {
-        rot(pos, cnt % 2 == 0 ? b : !b); // 번갈아가며 방향 반대.
-        cnt++;
-    }
-    cnt = 1;
-    for (int pos = a + 1; pos <= r; pos++)
-    {
-        rot(pos, cnt % 2 == 0 ? b : !b); // 번갈아가며 방향 반대.
-        cnt++;
-    }
-    for (int i = 0; i < n; i++)
-    {
-        if (s[i][0] == '1')
-            ret++;
+        if (a[i].second <= idx)
+            continue;
+        if (idx < a[i].first)
+        {
+            b = (a[i].second - a[i].first) / m + ((a[i].second - a[i].first) % m ? 1 : 0);
+            idx = a[i].first + b * m;
+        }
+        else
+        { // a[i].second > idx
+            b = (a[i].second - idx) / m + ((a[i].second - idx) % m ? 1 : 0);
+            idx = idx + b * m;
+        }
+        ret += b;
     }
     cout << ret << "\n";
     return 0;
