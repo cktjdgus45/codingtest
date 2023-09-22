@@ -1,39 +1,43 @@
-#include <bits/stdc++.h>
+#include <stdio.h>
+#include <algorithm>
+#include <queue>
+#include <vector>
+#include <string.h>
 using namespace std;
+int n;
+int a[12], b[4];
+int p, minu, mul, divi;
+int ret = -1000000001;
+int ret2 = 1000000001;
 
-int n, m, idx, ret, b;
-
-void fastIO()
+void go(int index, int cur, int p, int minu, int mul, int divi)
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+    if (index == n - 1)
+    {
+        ret = max(cur, ret);
+        ret2 = min(ret2, cur);
+        return;
+    }
+    if (p)
+        go(index + 1, cur + a[index + 1], p - 1, minu, mul, divi);
+    if (minu)
+        go(index + 1, cur - a[index + 1], p, minu - 1, mul, divi);
+    if (mul)
+        go(index + 1, cur * a[index + 1], p, minu, mul - 1, divi);
+    if (divi)
+        go(index + 1, cur / a[index + 1], p, minu, mul, divi - 1);
+    return;
 }
 
 int main()
 {
-    fastIO();
-    cin >> n >> m;
-    vector<pair<int, int>> a(n);
-    for (int i = 0; i < n; i++)
-        cin >> a[i].first >> a[i].second;
-    sort(a.begin(), a.end());
+    scanf("%d", &n);
     for (int i = 0; i < n; i++)
     {
-        if (a[i].second <= idx)
-            continue;
-        if (idx < a[i].first)
-        {
-            b = (a[i].second - a[i].first) / m + ((a[i].second - a[i].first) % m ? 1 : 0);
-            idx = a[i].first + b * m;
-        }
-        else
-        { // a[i].second > idx
-            b = (a[i].second - idx) / m + ((a[i].second - idx) % m ? 1 : 0);
-            idx = idx + b * m;
-        }
-        ret += b;
+        scanf("%d", &a[i]);
     }
-    cout << ret << "\n";
+    scanf("%d %d %d %d", &p, &minu, &mul, &divi);
+    go(0, a[0], p, minu, mul, divi);
+    printf("%d\n%d\n", ret, ret2);
     return 0;
 }
