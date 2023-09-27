@@ -1,43 +1,44 @@
-#include <stdio.h>
-#include <algorithm>
-#include <queue>
-#include <vector>
-#include <string.h>
+#include <bits/stdc++.h>
+#define MAX_N 16
 using namespace std;
-int n;
-int a[12], b[4];
-int p, minu, mul, divi;
-int ret = -1000000001;
-int ret2 = 1000000001;
-
-void go(int index, int cur, int p, int minu, int mul, int divi)
+const int INF = 987654321;
+int n, dp[MAX_N][1 << MAX_N], dist[MAX_N][MAX_N];
+int tsp(int here, int visited)
 {
-    if (index == n - 1)
+    if (visited == (1 << n) - 1) // 기저사례
     {
-        ret = max(cur, ret);
-        ret2 = min(ret2, cur);
-        return;
+        return dist[here][0] ? dist[here][0] : INF;
     }
-    if (p)
-        go(index + 1, cur + a[index + 1], p - 1, minu, mul, divi);
-    if (minu)
-        go(index + 1, cur - a[index + 1], p, minu - 1, mul, divi);
-    if (mul)
-        go(index + 1, cur * a[index + 1], p, minu, mul - 1, divi);
-    if (divi)
-        go(index + 1, cur / a[index + 1], p, minu, mul, divi - 1);
-    return;
+    int &ret = dp[here][visited]; // 메모이제이션
+    if (ret != -1)
+        return ret;
+    ret = INF;
+    for (int i = 0; i < n; i++) // 로직
+    {
+        if (visited & (1 << i))
+            continue;
+        if (dist[here][i] == 0)
+            continue;
+        ret = min(ret, tsp(i, (visited | (1 << i))) + dist[here][i]);
+        cout << ret << "\n";
+    }
+    return ret;
 }
 
 int main()
 {
-    scanf("%d", &n);
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    cin >> n;
     for (int i = 0; i < n; i++)
     {
-        scanf("%d", &a[i]);
+        for (int j = 0; j < n; j++)
+        {
+            cin >> dist[i][j];
+        }
     }
-    scanf("%d %d %d %d", &p, &minu, &mul, &divi);
-    go(0, a[0], p, minu, mul, divi);
-    printf("%d\n%d\n", ret, ret2);
+    memset(dp, -1, sizeof(dp)); // 초기화
+    cout << tsp(0, 1) << '\n';
     return 0;
 }
