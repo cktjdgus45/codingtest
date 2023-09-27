@@ -1,66 +1,51 @@
 #include <bits/stdc++.h>
 using namespace std;
-
-int n, a[24][24], dp[24][24][3];
-
-void fastIO()
+int t, a, d[54][54];
+char b[54][54];
+bool check[54][54];
+string s;
+const int dy[4] = {-1, 0, 1, 0};
+const int dx[4] = {0, 1, 0, -1};
+bool in(int y, int x)
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+    return (1 <= y && y <= t && 1 <= x && x <= a);
 }
-
-bool check(int y, int x, int d)
+int down(int y, int x)
 {
-    if (d == 0 || d == 2)
-    {
-        if (!a[y][x])
-            return true; // a[y][x] == 0 ºóÄ­
+    if (!in(y, x) || b[y][x] == 'H')
+        return 0; // base case
+    if (check[y][x])
+    { // base case
+        cout << -1 << "\n";
+        exit(0);
     }
-    else if (d == 1)
+    int &ret = d[y][x]; // memoization
+    if (ret)
+        return ret; // base case
+
+    check[y][x] = 1;
+    int value = (int)b[y][x] - '0'; // to int
+    for (int i = 0; i < 4; i++)
     {
-        if (a[y][x] == 0 && a[y - 1][x] == 0 && a[y][x - 1] == 0)
-            return true;
+        int ny = y + dy[i] * value;
+        int nx = x + dx[i] * value;
+        ret = max(ret, down(ny, nx) + 1);
     }
+    check[y][x] = 0;
+    return ret;
 }
 
 int main()
 {
-    fastIO();
-    cin >> n;
-    for (int i = 1; i <= n; i++)
+    cin >> t >> a;
+    for (int i = 1; i <= t; i++)
     {
-        for (int j = 1; j <= n; j++)
+        cin >> s;
+        for (int j = 1; j <= a; j++)
         {
-            cin >> a[i][j];
+            b[i][j] = s[j - 1];
         }
     }
-    dp[1][2][0] = 1;
-    for (int i = 1; i <= n; i++)
-    {
-        for (int j = 1; j <= n; j++)
-        {
-            if (check(i, j + 1, 0))
-                dp[i][j + 1][0] += dp[i][j][0];
-            if (check(i + 1, j + 1, 1))
-                dp[i + 1][j + 1][1] += dp[i][j][0];
-
-            if (check(i + 1, j, 2))
-                dp[i + 1][j][2] += dp[i][j][2];
-            if (check(i + 1, j + 1, 1))
-                dp[i + 1][j + 1][1] += dp[i][j][2];
-
-            if (check(i, j + 1, 0))
-                dp[i][j + 1][0] += dp[i][j][1];
-            if (check(i + 1, j + 1, 1))
-                dp[i + 1][j + 1][1] += dp[i][j][1];
-            if (check(i + 1, j, 2))
-                dp[i + 1][j][2] += dp[i][j][1];
-        }
-    }
-    int ret = dp[n][n][0];
-    ret += dp[n][n][1];
-    ret += dp[n][n][2];
-    cout << ret << "\n";
+    cout << down(1, 1) << "\n";
     return 0;
 }
