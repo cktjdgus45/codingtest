@@ -1,35 +1,27 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int INF = 987654321;
-int dp[1000004], n; // 1<= n <=100¸¸
-void go(int here)
-{
-    if (here == 0)
-        return;
-    printf("%d ", here);
-    if (here % 3 == 0 && (dp[here] == dp[here / 3] + 1))
-        go(here / 3);
-    else if (here % 2 == 0 && (dp[here] == dp[here / 2] + 1))
-        go(here / 2);
-    else if (here - 1 == 0 && (dp[here] == dp[here - 1] + 1))
-        go(here - 1);
-    return;
-}
+int n, k, a[10001], temp, INF = 9876543421;
+
 int main()
 {
-    scanf("%d", &n);
-    fill(dp, dp + 1000004, INF); // initial
-    dp[1] = 0;
-    for (int i = 1; i <= n; i++) // initial
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    cin >> n >> k;
+    fill(a, a + 1000, INF); // initialize
+    a[0] = 0;
+    for (int i = 0; i < n; i++)
     {
-        if (!(i % 3))
-            dp[i] = min(dp[i / 3] + 1, dp[i]); // memoization
-        if (!(i % 2))
-            dp[i] = min(dp[i / 2] + 1, dp[i]);
-        dp[i] = min(dp[i - 1] + 1, dp[i]);
+        cin >> temp;
+        for (int j = temp; j <= k; j++)
+        {
+            a[j] = min(a[j], a[j - temp] + 1); // memoization
+        }
     }
-    printf("%d\n", dp[n]);
-    go(n);
+    if (a[k] == = INF)
+        cout << -1 << "\n";
+    else
+        cout << a[k] << "\n";
     return 0;
 }
