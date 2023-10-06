@@ -1,30 +1,35 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-typedef long long ll; // 경우의 수 ll박고시작.
-ll n, dp[31][31];     // N <= 30
-
-int go(int whole, int not_whole)
+const int INF = 987654321;
+int dp[1000004], n; // 1<= n <=100만
+void go(int here)
 {
-    if (whole == 0 && not_whole == 0) // base case
-        return 1;
-    if (dp[whole][not_whole])
-        return dp[whole][not_whole];
-    ll &ret = dp[whole][not_whole]; // memoization
-    if (whole > 0)                  // logic
-        ret += go(whole - 1, not_whole + 1);
-    if (not_whole > 0)
-        ret += go(whole, not_whole - 1);
-    return ret;
+    if (here == 0)
+        return;
+    printf("%d ", here);
+    if (here % 3 == 0 && (dp[here] == dp[here / 3] + 1))
+        go(here / 3);
+    else if (here % 2 == 0 && (dp[here] == dp[here / 2] + 1))
+        go(here / 2);
+    else if (here - 1 == 0 && (dp[here] == dp[here - 1] + 1))
+        go(here - 1);
+    return;
 }
-
 int main()
 {
-    while (true)
+    scanf("%d", &n);
+    fill(dp, dp + 1000004, INF); // initial
+    dp[1] = 0;
+    for (int i = 1; i <= n; i++) // initial
     {
-        cin >> n;
-        if (n == 0)
-            break;
-        cout << go(n, 0) << "\n";
+        if (!(i % 3))
+            dp[i] = min(dp[i / 3] + 1, dp[i]); // memoization
+        if (!(i % 2))
+            dp[i] = min(dp[i / 2] + 1, dp[i]);
+        dp[i] = min(dp[i - 1] + 1, dp[i]);
     }
+    printf("%d\n", dp[n]);
+    go(n);
+    return 0;
 }
