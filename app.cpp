@@ -1,27 +1,21 @@
 #include <bits/stdc++.h>
+#include <algorithm>
 using namespace std;
-int cost, n, m1, m2, c;
-int dp[100004];
 
+int dp[100001]; // 1<= K <= 100000
+int n, k, w, v;
 int main()
 {
-    while (1)
+    scanf("%d %d", &n, &k);
+    while (n--)
     {
-        scanf("%d %d %d", &n, &m1, &m2);
-        if (n == 0)
-            break;
-        int cost = m1 * 100 + m2;
-        memset(dp, 0, sizeof(dp));
-        for (int i = 0; i < n; i++)
+        scanf("%d %d", &w, &v);
+        for (int j = k; j >= w; j--) // 최대 k만큼의 무게만을 넣을수 있는 배낭.
         {
-            scanf("%d %d %d", &c, &m1, &m2);
-            int p = m1 * 100 + m2;
-            for (int j = p; j <= cost; j++)
-            {
-                dp[j] = max(dp[j], dp[j - p] + c);
-            }
+            dp[j] = max(dp[j], dp[j - w] + v);
         }
-        printf("%d\n", dp[cost]);
     }
+
+    printf("%d", dp[k]);
     return 0;
 }
