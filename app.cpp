@@ -1,21 +1,42 @@
 #include <bits/stdc++.h>
-#include <algorithm>
 using namespace std;
 
-int dp[100001]; // 1<= K <= 100000
-int n, k, w, v;
+const int n = 18;
+bool isP[20];
+double a, b, dp[20][20][20];
+double go(int idx, int x, int y)
+{
+    if (idx == n)
+        return isP[x] || isP[y] ? 1.0 : 0.0;
+    double &ret = dp[idx][x][y];
+    if (ret > -0.5)
+        return ret;
+    ret = 0.0;
+    ret += go(idx + 1, x + 1, y) * a * (1 - b);   // 1 0
+    ret += go(idx + 1, x, y + 1) * (1 - a) * b;   // 0 1
+    ret += go(idx + 1, x + 1, y + 1) * a * b;     // 1 1
+    ret += go(idx + 1, x, y) * (1 - a) * (1 - b); // 0 0
+    return ret;
+}
+
+void era()
+{
+    fill(isP, isP + 20, 1);
+    isP[0] = 0;
+    isP[1] = 0;
+    for (int i = 2; i <= 20; i++)
+    {
+        for (int j = 2 * i; j < 20; j += i)
+            isP[j] = 0;
+    }
+}
+
 int main()
 {
-    scanf("%d %d", &n, &k);
-    while (n--)
-    {
-        scanf("%d %d", &w, &v);
-        for (int j = k; j >= w; j--) // 최대 k만큼의 무게만을 넣을수 있는 배낭.
-        {
-            dp[j] = max(dp[j], dp[j - w] + v);
-        }
-    }
-
-    printf("%d", dp[k]);
-    return 0;
+    scanf("%lf %lf", &a, &b);
+    a /= 100;
+    b /= 100;
+    era();
+    memset(dp, -1, sizeof(dp));
+    printf("%.61f", go(0, 0, 0));
 }
