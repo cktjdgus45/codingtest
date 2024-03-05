@@ -1,42 +1,20 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int n = 18;
-bool isP[20];
-double a, b, dp[20][20][20];
-double go(int idx, int x, int y)
-{
-    if (idx == n)
-        return isP[x] || isP[y] ? 1.0 : 0.0;
-    double &ret = dp[idx][x][y];
-    if (ret > -0.5)
-        return ret;
-    ret = 0.0;
-    ret += go(idx + 1, x + 1, y) * a * (1 - b);   // 1 0
-    ret += go(idx + 1, x, y + 1) * (1 - a) * b;   // 0 1
-    ret += go(idx + 1, x + 1, y + 1) * a * b;     // 1 1
-    ret += go(idx + 1, x, y) * (1 - a) * (1 - b); // 0 0
+vector<string> split(string input,string delimiter){
+    vector<string> ret;
+    long long pos = 0;
+    while((pos = input.find(delimiter)) != string::npos){
+        token = input.substr(0,pos);
+        ret.push_back(token);
+        string.erase(0,pos+delimiter.length());
+    }
+    ret.push_back(input);
     return ret;
 }
 
-void era()
-{
-    fill(isP, isP + 20, 1);
-    isP[0] = 0;
-    isP[1] = 0;
-    for (int i = 2; i <= 20; i++)
-    {
-        for (int j = 2 * i; j < 20; j += i)
-            isP[j] = 0;
-    }
-}
-
-int main()
-{
-    scanf("%lf %lf", &a, &b);
-    a /= 100;
-    b /= 100;
-    era();
-    memset(dp, -1, sizeof(dp));
-    printf("%.61f", go(0, 0, 0));
+int main(){
+    string s = "abcdabc";
+    vector<string> a = split(s,d);
+    for(string b : a) cout << b << "\n";
 }
