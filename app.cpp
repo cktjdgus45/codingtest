@@ -4,6 +4,7 @@ using namespace std;
 vector<string> split(string input,string delimiter){
     vector<string> ret;
     long long pos = 0;
+    string token = "";
     while((pos = input.find(delimiter)) != string::npos){
         token = input.substr(0,pos);
         ret.push_back(token);
@@ -14,7 +15,7 @@ vector<string> split(string input,string delimiter){
 }
 
 int main(){
-    string s = "abcdabc";
+    string s = "abcdabc",d="d";
     vector<string> a = split(s,d);
     for(string b : a) cout << b << "\n";
 }
