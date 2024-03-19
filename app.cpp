@@ -1,21 +1,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<string> split(string input,string delimiter){
-    vector<string> ret;
-    long long pos = 0;
-    string token = "";
-    while((pos = input.find(delimiter)) != string::npos){
-        token = input.substr(0,pos);
-        ret.push_back(token);
-        string.erase(0,pos+delimiter.length());
-    }
-    ret.push_back(input);
-    return ret;
-}
+string s, temp;
 
-int main(){
-    string s = "abcdabc",d="d";
-    vector<string> a = split(s,d);
-    for(string b : a) cout << b << "\n";
+int main()
+{
+    cin >> s;
+    temp = s;
+    reverse(temp.begin(), temp.end());
+    if (s == temp)
+        cout << 1 << "\n";
+    else
+        cout << 0 << "\n";
+    return 0;
 }
