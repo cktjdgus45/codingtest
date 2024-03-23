@@ -1,29 +1,27 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int n, ret;
-string s;
+int n;
+
 int main()
 {
-    cin >> n;
-    for (int i = 0; i < n; i++)
+    while (scanf("%d", &n) != EOF)
     {
-        cin >> s;
-        stack<char> stk;
-        for (char a : s)
+        int cnt = 1, ret = 1;
+        while (true)
         {
-            if (stk.size() && stk.top() == a)
+            if (cnt % n == 0)
             {
-                stk.pop();
+                printf("%d\n", ret);
+                break;
             }
             else
             {
-                stk.push(a);
+                cnt = (cnt * 10) + 1;
+                cnt %= n;
+                ret++;
             }
         }
-        if (stk.size() == 0)
-            ret++;
     }
-    cout << ret << "\n";
     return 0;
 }
