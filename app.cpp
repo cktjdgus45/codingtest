@@ -1,40 +1,46 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int max_n = 104;
-int n, m, a[max_n][max_n], visited[max_n][max_n], y, x;
-const int dy[4] = {-1, 0, 1, 0};
-const int dx[4] = {0, 1, 0, -1};
+int dy[4] = {-1,0,1,0};
+int dx[4] = {0,1,0,-1};
+int t,m,n,k,ret,y,x,ny,nx;
+int a[51][51];
+bool visited[51][51];
 
-int main()
-{
-    scanf("%d %d", &n, &m);
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < m; j++)
-        {
-            scanf("%1d", &a[i][j]);
+void dfs(int y,int x){
+    visited[y][x] = 1;
+    for(int i = 0 ; i < 4; i++){
+        ny = y+dy[i];
+        nx = x+dx[i];
+        if(ny < 0 || nx < 0 || ny >= n || nx >= m) continue;
+        if(a[ny][nx]==1 && !visited[ny][nx]){
+            dfs(ny,nx);
         }
     }
-    queue<pair<int, int>> q;
-    q.push({0, 0});
-    visited[0][0] = 1;
-    while (q.size())
-    {
-        tie(y, x) = q.front();
-        q.pop();
-        for (int i = 0; i < 4; i++)
-        {
-            int ny = y + dy[i];
-            int nx = x + dx[i];
-            if (ny < 0 || nx < 0 || ny >= n || nx >= m || a[ny][nx] == 0)
-                continue;
-            if (visited[ny][nx])
-                continue;
-            visited[ny][nx] = visited[y][x] + 1;
-            q.push({ny, nx});
+    return;
+}
+
+int main(){
+    cin.tie(NULL);cout.tie(NULL);
+    cin >> t;
+    while(t--){
+        fill(&a[0][0],&a[0][0]+51*51,0); // 테스트 초기화
+        fill(&visited[0][0],&visited[0][0]+51*51,0); // 테스트 초기화
+        ret = 0; // 테스트 초기화
+        cin >> m >> n >> k;
+        for(int i = 0 ; i <k; i++){
+            cin >>y >> x;
+            a[y][x] = 1;
         }
+        for(int i = 0 ; i < n ; i++){
+            for(int j = 0 ; j < m ; j++){
+                if(a[i][j] == 1 && !visited[i][j]){
+                    dfs(i,j);
+                    ret++;
+                }
+            }
+        }
+        cout << ret << "\n";
     }
-    printf("%d", visited[n - 1][m - 1]);
     return 0;
 }
