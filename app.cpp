@@ -1,46 +1,37 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-int dy[4] = {-1,0,1,0};
-int dx[4] = {0,1,0,-1};
-int t,m,n,k,ret,y,x,ny,nx;
-int a[51][51];
-bool visited[51][51];
-
-void dfs(int y,int x){
-    visited[y][x] = 1;
-    for(int i = 0 ; i < 4; i++){
-        ny = y+dy[i];
-        nx = x+dx[i];
-        if(ny < 0 || nx < 0 || ny >= n || nx >= m) continue;
-        if(a[ny][nx]==1 && !visited[ny][nx]){
-            dfs(ny,nx);
-        }
-    }
-    return;
-}
-
-int main(){
-    cin.tie(NULL);cout.tie(NULL);
-    cin >> t;
-    while(t--){
-        fill(&a[0][0],&a[0][0]+51*51,0); // 테스트 초기화
-        fill(&visited[0][0],&visited[0][0]+51*51,0); // 테스트 초기화
-        ret = 0; // 테스트 초기화
-        cin >> m >> n >> k;
-        for(int i = 0 ; i <k; i++){
-            cin >>y >> x;
-            a[y][x] = 1;
-        }
-        for(int i = 0 ; i < n ; i++){
-            for(int j = 0 ; j < m ; j++){
-                if(a[i][j] == 1 && !visited[i][j]){
-                    dfs(i,j);
-                    ret++;
-                }
+#include<bits/stdc++.h>
+using namespace std; 
+typedef long long int ll;     
+int n; 
+string s;   
+char a[101][101];
+string quard(int y, int x, int size){
+    if(size == 1) return string(1, a[y][x]); 
+    char b = a[y][x]; 
+    string ret = "";  
+    for(int i = y; i < y + size; i++){
+        for(int j = x; j < x + size; j++){ 
+            if(b != a[i][j]){ 
+                ret += '(';
+                ret += quard(y, x, size / 2); 
+                ret += quard(y, x + size / 2, size / 2);
+                ret += quard(y + size / 2, x, size / 2);
+                ret += quard(y + size / 2, x + size / 2, size / 2); 
+                ret += ')';
+                return ret;  
             }
-        }
-        cout << ret << "\n";
+        } 
     }
-    return 0;
+    return string(1, a[y][x]); 
+}
+int main(){
+	ios_base::sync_with_stdio(0); cin.tie(NULL);
+    cin >> n; 
+    for(int i = 0; i < n; i++){
+        cin >> s; 
+        for(int j = 0; j < n; j++){
+            a[i][j] = s[j];
+        }
+    }
+    cout << quard(0, 0, n) << '\n'; 
+	return 0; 
 }
