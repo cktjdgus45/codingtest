@@ -1,39 +1,34 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int n, m, root, r;
-vector<int> adj[54];
+vector<int> adj[10001];
+int dp[10001],mx,visited[10001],n,m,a,b;
 
-int dfs(int here)
-{
-    int ret = 0;
-    int child = 0;
-    for (int there : adj[here])
-    {
-        if (there == r)
-            continue;
-        ret += dfs(there);
-        child++;
+int dfs(int here){
+    visited[here]=1;
+    int ret =1;
+    for(int there:adj[here]){
+        if(visited[there])continue;
+        ret+=dfs(there);
     }
-    if (child == 0)
-        return 1;
     return ret;
 }
 
-int main()
-{
-    cin >> n;
-    for (int i = 0; i < n; i++)
-    {
-        cin >> m;
-        if (m == -1)
-            root = i;
-        else
-            adj[m].push_back(i);
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cin >> n >> m;
+    while(m--){
+        cin >> a >> b;
+        adj[b].push_back(a);
     }
-    cin >> r;
-    if (r == root)
-        cout << 0 << "\n";
-    cout << dfs(root) << "\n";
+    for(int i = 1; i <=n; i++){
+        memset(visited,0,sizeof(visited));
+        dp[i] = dfs(i);
+        mx=max(dp[i],mx);
+    }
+    for(int i = 1; i<=n;i++){
+        if(mx ==dp[i]) cout << i << " ";
+    }
     return 0;
 }
