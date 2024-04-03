@@ -1,45 +1,40 @@
-#include <bits/stdc++.h> 
+#include <bits/stdc++.h>
 using namespace std;
-const int INF = 987654321;
-int dp[64][64][64], a[3], n, visited[64][64][64]; 
-int _a[6][3] = {
-	{9, 3, 1}, 
-	{9, 1, 3}, 
-	{3, 1, 9}, 
-	{3, 9, 1}, 
-	{1, 3, 9}, 
-	{1, 9, 3}
-};
-struct A{
-    int a, b, c; 
-}; 
-queue<A>q; 
-int solve(int a, int b, int c){
-    visited[a][b][c] = 1; 
-    q.push({a, b, c}); 
-    while(q.size()){
-        int a = q.front().a; 
-        int b = q.front().b; 
-        int c = q.front().c; 
-        q.pop();
-        if(visited[0][0][0]) break;
-        for(int i = 0; i < 6; i++){
-            int na = max(0, a - _a[i][0]);
-            int nb = max(0, b - _a[i][1]); 
-            int nc = max(0, c - _a[i][2]); 
-            if(visited[na][nb][nc]) continue;
-            visited[na][nb][nc] = visited[a][b][c] + 1;  
-            q.push({na, nb, nc}); 
+int R, C, ret, ny, nx, visited[30];
+char a[21][21];
+const int dy[] = {-1, 0, 1, 0};
+const int dx[] = {0, 1, 0, -1};
+void go(int y, int x, int cnt)
+{
+    ret = max(ret, cnt);
+    for (int i = 0; i < 4; i++)
+    {
+        ny = y + dy[i], nx = x + dx[i];
+        if (ny < 0 || ny >= R || nx < 0 || nx >= C)
+            continue;
+        int next = (int)(a[ny][nx] - 'A');
+
+        if (visited[next] == 0)
+        {
+            visited[next] = 1;
+            go(ny, nx, cnt + 1);
+            visited[next] = 0;
         }
     }
-    return visited[0][0][0] - 1;   
+    return;
 }
-int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-	cin >> n; 
-	for(int i = 0; i < n; i++) cin >> a[i]; 
-	cout << solve(a[0], a[1], a[2]) << "\n"; 
+int main()
+{
+    cin >> R >> C;
+    for (int i = 0; i < R; i++)
+    {
+        for (int j = 0; j < C; j++)
+        {
+            cin >> a[i][j];
+        }
+    }
+    visited[(int)a[0][0] - 'A'] = 1;
+    go(0, 0, 1);
+    cout << ret << '\n';
     return 0;
 }
