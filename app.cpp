@@ -1,60 +1,41 @@
 #include <bits/stdc++.h>
 using namespace std;
-typedef long long ll;
-const int INF = 987654321;
-int n, mp, mf, ms, mv;
-int b, c, d, e, ret = INF, sum;
-struct A
+int n, m, words[51];
+string s;
+int count(int mask)
 {
-	int mp, mf, ms, mv, cost;
-} a[16];
-map<int, vector<vector<int>>> ret_v;
+    int cnt = 0;
+    for (int word : words)
+    {
+        if (word && (word & mask) == word)
+            cnt++;
+    }
+    return cnt;
+}
+int go(int index, int k, int mask)
+{
+    if (k < 0)
+        return 0;
+    if (index == 26)
+        return count(mask);
+    int ret = go(index + 1, k - 1, mask | (1 << index));
+    if (index != 'a' - 'a' && index != 'n' - 'a' && index != 't' - 'a' && index != 'i' - 'a' && index != 'c' - 'a')
+    {
+        ret = max(ret, go(index + 1, k, mask));
+    }
+    return ret;
+}
 int main()
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-	cin >> n;
-	cin >> mp >> mf >> ms >> mv;
-	for (int i = 0; i < n; i++)
-	{
-		cin >> a[i].mp >> a[i].mf >> a[i].ms >> a[i].mv >> a[i].cost;
-	}
-	for (int i = 1; i < (1 << n); i++)
-	{ // ex i =6 000110 경우의수일때.
-		b = c = d = e = sum = 0;
-		vector<int> v;
-		for (int j = 0; j < n; j++)
-		{ // n(j)번째 영양제가 포함.
-			if (i & (1 << j))
-			{
-				v.push_back(j + 1);
-				b += a[j].mp;
-				c += a[j].mf;
-				d += a[j].ms;
-				e += a[j].mv;
-				sum += a[j].cost;
-			}
-		}
-		if (b >= mp && c >= mf && d >= ms && e >= mv)
-		{
-			if (ret >= sum)
-			{
-				ret = sum;
-				ret_v[ret].push_back(v);
-			}
-		}
-	}
-	if (ret == INF)
-		cout << -1 << '\n';
-	else
-	{
-		sort(ret_v[ret].begin(), ret_v[ret].end());
-		cout << ret << "\n";
-		for (int a : ret_v[ret][0])
-		{
-			cout << a << " ";
-		}
-	}
-	return 0;
+    cin >> n >> m;
+    for (int i = 0; i < n; i++)
+    {
+        cin >> s;
+        for (char str : s)
+        {
+            words[i] |= (1 << (str - 'a'));
+        }
+    }
+    cout << go(0, m, 0) << '\n';
+    return 0;
 }
