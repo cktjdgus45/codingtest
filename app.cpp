@@ -1,30 +1,37 @@
 #include <bits/stdc++.h>
 using namespace std;
-int n, a, b, ret;
-vector<pair<int, int>> v;
-priority_queue<int, vector<int>, greater<int>> pq;
+typedef long long ll;
+int t, n, m, temp;
+unordered_map<int, int> mp;
+int check(int temp, vector<int> &v)
+{
+    int l = 0, r = v.size() - 1;
+    int mid;
+    while (l <= r)
+    {
+        mid = (l + r) / 2;
+        if (v[mid] > temp)
+            r = mid - 1;
+        else if (v[mid] == temp)
+            return 1;
+        else
+            l = mid + 1;
+    }
+    return 0;
+}
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    cin >> n;
-    for (int i = 0; i < n; i++)
+    scanf("%d", &t);
+    while (t--)
     {
-        cin >> a >> b;
-        v.push_back({a, b});
+        vector<int> v;
+        scanf("%d", &n);
+        for (int i = 0; i < n; i++)
+            scanf("%d", &temp), v.push_back(temp);
+        sort(v.begin(), v.end());
+        scanf("%d", &m);
+        for (int i = 0; i < m; i++)
+            scanf("%d", &temp), cout << check(temp, v) << "\n";
     }
-    sort(v.begin(), v.end());
-    for (int i = 0; i < v.size(); i++)
-    {
-        ret += v[i].second;
-        pq.push(v[i].second);
-        if (pq.size() > v[i].first)
-        {
-            ret -= pq.top();
-            pq.pop();
-        }
-    }
-    cout << ret << "\n";
     return 0;
 }
