@@ -1,19 +1,63 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
-int dp[1004][2][34], n, m, b[1004];
-
-int go(int idx, int tree, int cnt){
-	if(cnt < 0) return -1e9;
-	if(idx == n) return 0;
-    int &ret = dp[idx][tree][cnt];
-    if(~ret) return ret;  
-    return ret = max(go(idx + 1, tree^1, cnt - 1), go(idx + 1, tree, cnt)) + (tree == b[idx] - 1); 
+void fastIO()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
 }
+int n, a[24][24], dp[24][24][3];
+bool check(int y, int x, int d)
+{
+    if (d == 0 || d == 2)
+    {
+        if (!a[y][x])
+            return true;
+    }
+    else if (d == 1)
+    {
+        if (a[y][x] == 0 && a[y - 1][x] == 0 && a[y][x - 1] == 0)
+            return true;
+    }
+    return false;
+}
+int main()
+{
+    fastIO();
+    cin >> n;
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = 1; j <= n; j++)
+        {
+            cin >> a[i][j];
+        }
+    }
+    dp[1][2][0] = 1;
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = 1; j <= n; j++)
+        {
+            if (check(i, j + 1, 0))
+                dp[i][j + 1][0] += dp[i][j][0];
+            if (check(i + 1, j + 1, 1))
+                dp[i + 1][j + 1][1] += dp[i][j][0];
 
-int main(){
-	memset(dp,-1,sizeof(dp));
-	cin >> n >> m;
-    for(int i = 0; i < n; i++) cin >> b[i]; 
-    cout << max(go(0, 1, m - 1), go(0, 0, m)) << '\n'; 
+            if (check(i + 1, j, 2))
+                dp[i + 1][j][2] += dp[i][j][2];
+            if (check(i + 1, j + 1, 1))
+                dp[i + 1][j + 1][1] += dp[i][j][2];
+
+            if (check(i, j + 1, 0))
+                dp[i][j + 1][0] += dp[i][j][1];
+            if (check(i + 1, j, 2))
+                dp[i + 1][j][2] += dp[i][j][1];
+            if (check(i + 1, j + 1, 1))
+                dp[i + 1][j + 1][1] += dp[i][j][1];
+        }
+    }
+    int ret = dp[n][n][0];
+    ret += dp[n][n][1];
+    ret += dp[n][n][2];
+    cout << ret << "\n";
     return 0;
 }
