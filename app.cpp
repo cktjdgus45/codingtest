@@ -1,63 +1,26 @@
 #include <bits/stdc++.h>
 using namespace std;
-void fastIO()
-{
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-}
-int n, a[24][24], dp[24][24][3];
-bool check(int y, int x, int d)
-{
-    if (d == 0 || d == 2)
-    {
-        if (!a[y][x])
-            return true;
-    }
-    else if (d == 1)
-    {
-        if (a[y][x] == 0 && a[y - 1][x] == 0 && a[y][x - 1] == 0)
-            return true;
-    }
-    return false;
-}
+int cost, n, m1, m2, c;
+int dp[100004];
 int main()
 {
-    fastIO();
-    cin >> n;
-    for (int i = 1; i <= n; i++)
+    while (1)
     {
-        for (int j = 1; j <= n; j++)
+        scanf("%d %d.%d", &n, &m1, &m2);
+        if (n == 0)
+            break;
+        int cost = m1 * 100 + m2;
+        memset(dp, 0, sizeof(dp));
+        for (int i = 0; i < n; i++)
         {
-            cin >> a[i][j];
+            scanf("%d %d.%d", &c, &m1, &m2);
+            int p = m1 * 100 + m2;
+            for (int j = p; j <= cost; j++)
+            {
+                dp[j] = max(dp[j], dp[j - p] + c);
+            }
         }
+        printf("%d\n", dp[cost]);
     }
-    dp[1][2][0] = 1;
-    for (int i = 1; i <= n; i++)
-    {
-        for (int j = 1; j <= n; j++)
-        {
-            if (check(i, j + 1, 0))
-                dp[i][j + 1][0] += dp[i][j][0];
-            if (check(i + 1, j + 1, 1))
-                dp[i + 1][j + 1][1] += dp[i][j][0];
-
-            if (check(i + 1, j, 2))
-                dp[i + 1][j][2] += dp[i][j][2];
-            if (check(i + 1, j + 1, 1))
-                dp[i + 1][j + 1][1] += dp[i][j][2];
-
-            if (check(i, j + 1, 0))
-                dp[i][j + 1][0] += dp[i][j][1];
-            if (check(i + 1, j, 2))
-                dp[i + 1][j][2] += dp[i][j][1];
-            if (check(i + 1, j + 1, 1))
-                dp[i + 1][j + 1][1] += dp[i][j][1];
-        }
-    }
-    int ret = dp[n][n][0];
-    ret += dp[n][n][1];
-    ret += dp[n][n][2];
-    cout << ret << "\n";
     return 0;
 }
